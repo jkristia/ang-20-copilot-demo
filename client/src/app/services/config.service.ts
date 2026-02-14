@@ -1,18 +1,19 @@
 import { Injectable, inject, DestroyRef, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, fromEvent } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
-import { DemoConfig, DEFAULT_DEMO_CONFIG } from '../models';
+import {
+  DemoConfig,
+  DEFAULT_DEMO_CONFIG,
+  ConfigSocketEvents,
+  ConfigServerToClientEvents,
+  ConfigClientToServerEvents,
+} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  private socket: Socket;
+  private socket: Socket<ConfigServerToClientEvents, ConfigClientToServerEvents>;
   private destroyRef = inject(DestroyRef);
-
-  private configUpdatedSubject = new Subject<DemoConfig>();
-  configUpdated$ = this.configUpdatedSubject.asObservable();
 
   config = signal<DemoConfig>(DEFAULT_DEMO_CONFIG);
 
@@ -21,19 +22,13 @@ export class ConfigService {
       transports: ['websocket'],
     });
 
-    fromEvent<DemoConfig>(this.socket, 'config:current')
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((config) => {
-        this.config.set(config);
-        this.configUpdatedSubject.next(config);
-      });
+    this.socket.on(ConfigSocketEvents.CURRENT, (config) => {
+      this.config.set(config);
+    });
 
-    fromEvent<DemoConfig>(this.socket, 'config:updated')
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((config) => {
-        this.config.set(config);
-        this.configUpdatedSubject.next(config);
-      });
+    this.socket.on(ConfigSocketEvents.UPDATED, (config) => {
+      this.config.set(config);
+    });
 
     this.destroyRef.onDestroy(() => {
       this.socket.disconnect();
@@ -41,10 +36,10 @@ export class ConfigService {
   }
 
   getConfig(): void {
-    this.socket.emit('config:get');
+    this.socket.emit(ConfigSocketEvents.GET);
   }
 
   updateConfig(updates: Partial<DemoConfig>): void {
-    this.socket.emit('config:update', updates);
+    this.socket.emit(ConfigSocketEvents.UPDATE, updates);
   }
 }

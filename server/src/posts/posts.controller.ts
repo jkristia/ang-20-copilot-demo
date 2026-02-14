@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { PostsGateway } from './posts.gateway';
-import type { Post as BlogPost } from '@blog/shared';
-import { CreatePostDto, UpdatePostDto } from '@blog/shared';
+import type { Post as BlogPost } from '../../../shared/src/model.interfaces';
+import { CreatePostDto, UpdatePostDto } from '../../../shared/src/model.interfaces';
 
 @Controller('posts')
 export class PostsController {

@@ -1,6 +1,6 @@
 import { Controller, Get, Put, Body } from '@nestjs/common';
 import { ConfigService } from './config.service';
-import type { DemoConfig } from '@blog/shared';
+import type { DemoConfig } from '../../../shared/src/model.interfaces';
 
 @Controller('config')
 export class ConfigController {

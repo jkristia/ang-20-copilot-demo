@@ -5,6 +5,11 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import {
+  PostsSocketEvents,
+  PostsServerToClientEvents,
+  PostsClientToServerEvents,
+} from '../../../shared/src/socket-events';
 
 @WebSocketGateway({
   cors: {
@@ -14,7 +19,7 @@ import { Server, Socket } from 'socket.io';
 })
 export class PostsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  server!: Server;
+  server!: Server<PostsClientToServerEvents, PostsServerToClientEvents>;
 
   handleConnection(client: Socket) {
     console.log(`Client connected: ${client.id}`);
@@ -28,6 +33,6 @@ export class PostsGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * Emit a posts update event to all connected clients
    */
   emitPostsUpdate(): void {
-    this.server.emit('posts:updated');
+    this.server.emit(PostsSocketEvents.UPDATED);
   }
 }

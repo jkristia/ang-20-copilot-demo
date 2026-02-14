@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DemoConfig, DEFAULT_DEMO_CONFIG } from '@blog/shared';
+import { DemoConfig, DEFAULT_DEMO_CONFIG } from '../../../shared/src/model.interfaces';
 
 @Injectable()
 export class ConfigService {

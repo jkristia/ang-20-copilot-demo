@@ -68,4 +68,5 @@ step4:
 		- int editor should allow int characters
 		- string and select should only be anbled when  enabled = true
 		- changes should be reflected on all connected clients
+	- socket must be typed, and interface defined in shared
 

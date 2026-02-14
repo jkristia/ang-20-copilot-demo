@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Post, CreatePostDto, UpdatePostDto } from '@blog/shared';
+import { Post, CreatePostDto, UpdatePostDto } from '../../../shared/src/model.interfaces';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -70,7 +70,9 @@ export class PostsService {
   create(createPostDto: CreatePostDto): Post {
     const newPost: Post = {
       id: randomUUID(),
-      ...createPostDto,
+      date: createPostDto.date ?? new Date().toISOString(),
+      topic: createPostDto.topic,
+      message: createPostDto.message,
     };
     this.posts.push(newPost);
     return newPost;

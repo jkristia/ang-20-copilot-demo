@@ -1,12 +1,17 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Subject, Observable } from 'rxjs';
+import {
+  PostsSocketEvents,
+  PostsServerToClientEvents,
+  PostsClientToServerEvents,
+} from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService implements OnDestroy {
-  private socket: Socket;
+  private socket: Socket<PostsServerToClientEvents, PostsClientToServerEvents>;
   private postsUpdated$ = new Subject<void>();
 
   constructor() {
@@ -22,7 +27,7 @@ export class WebSocketService implements OnDestroy {
       console.log('WebSocket disconnected');
     });
 
-    this.socket.on('posts:updated', () => {
+    this.socket.on(PostsSocketEvents.UPDATED, () => {
       console.log('Posts updated notification received');
       this.postsUpdated$.next();
     });

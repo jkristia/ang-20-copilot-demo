@@ -8,7 +8,12 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ConfigService } from './config.service';
-import type { DemoConfig } from '@blog/shared';
+import type { DemoConfig } from '../../../shared/src/model.interfaces';
+import {
+  ConfigSocketEvents,
+  ConfigServerToClientEvents,
+  ConfigClientToServerEvents,
+} from '../../../shared/src/socket-events';
 
 @WebSocketGateway({
   cors: {
@@ -18,16 +23,16 @@ import type { DemoConfig } from '@blog/shared';
 })
 export class ConfigGateway implements OnGatewayConnection {
   @WebSocketServer()
-  server!: Server;
+  server!: Server<ConfigClientToServerEvents, ConfigServerToClientEvents>;
 
   constructor(private readonly configService: ConfigService) {}
 
   handleConnection(client: Socket) {
     // Send current config to newly connected client
-    client.emit('config:current', this.configService.getConfig());
+    client.emit(ConfigSocketEvents.CURRENT, this.configService.getConfig());
   }
 
-  @SubscribeMessage('config:update')
+  @SubscribeMessage(ConfigSocketEvents.UPDATE)
   handleConfigUpdate(
     @MessageBody() updates: Partial<DemoConfig>,
     @ConnectedSocket() client: Socket,
@@ -35,14 +40,14 @@ export class ConfigGateway implements OnGatewayConnection {
     const updatedConfig = this.configService.updateConfig(updates);
     
     // Broadcast to all clients except sender
-    client.broadcast.emit('config:updated', updatedConfig);
+    client.broadcast.emit(ConfigSocketEvents.UPDATED, updatedConfig);
     
     // Also send back to sender to confirm
-    client.emit('config:updated', updatedConfig);
+    client.emit(ConfigSocketEvents.UPDATED, updatedConfig);
   }
 
-  @SubscribeMessage('config:get')
+  @SubscribeMessage(ConfigSocketEvents.GET)
   handleGetConfig(@ConnectedSocket() client: Socket): void {
-    client.emit('config:current', this.configService.getConfig());
+    client.emit(ConfigSocketEvents.CURRENT, this.configService.getConfig());
   }
 }
