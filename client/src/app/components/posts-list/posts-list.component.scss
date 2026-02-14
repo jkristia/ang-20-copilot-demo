@@ -53,10 +53,14 @@
 }
 
 .post-card {
-  transition: box-shadow 0.2s ease-in-out;
+  transition: box-shadow 0.2s ease-in-out, background-color 0.5s ease-out;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &.new-post {
+    animation: highlight-pulse 2s ease-out;
   }
 
   mat-card-header {
@@ -86,5 +90,20 @@
       color: #555;
       line-height: 1.6;
     }
+  }
+}
+
+@keyframes highlight-pulse {
+  0% {
+    background-color: #c8e6c9;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+  }
+  50% {
+    background-color: #e8f5e9;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
   }
 }

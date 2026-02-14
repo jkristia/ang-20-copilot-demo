@@ -24,7 +24,7 @@
   } @else {
     <div class="posts-grid">
       @for (post of posts(); track post.id) {
-        <mat-card class="post-card">
+        <mat-card class="post-card" [class.new-post]="isNewPost(post.id)">
           <mat-card-header>
             <mat-card-title>{{ post.topic }}</mat-card-title>
             <mat-card-subtitle>

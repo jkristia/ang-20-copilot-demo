@@ -36,6 +36,9 @@ export class PostsListComponent implements OnInit {
 
   posts = signal<Post[]>([]);
   loading = signal(false);
+  
+  /** Set of post IDs that should be highlighted as new */
+  newPostIds = signal<Set<string>>(new Set());
 
   ngOnInit(): void {
     this.loadPosts();
@@ -47,7 +50,7 @@ export class PostsListComponent implements OnInit {
         this.snackBar.open('Posts updated! Refreshing...', 'Close', {
           duration: 2000,
         });
-        this.loadPosts();
+        this.loadPostsWithHighlight();
       });
   }
 
@@ -66,6 +69,48 @@ export class PostsListComponent implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  /** Load posts and highlight any new ones that weren't in the previous list */
+  private loadPostsWithHighlight(): void {
+    const currentIds = new Set(this.posts().map(p => p.id));
+    
+    this.loading.set(true);
+    this.postService.getPosts().subscribe({
+      next: (posts) => {
+        // Find new post IDs that weren't in the previous list
+        const newIds = new Set<string>();
+        for (const post of posts) {
+          if (!currentIds.has(post.id)) {
+            newIds.add(post.id);
+          }
+        }
+        
+        this.posts.set(posts);
+        this.loading.set(false);
+        
+        // Highlight new posts
+        if (newIds.size > 0) {
+          this.newPostIds.set(newIds);
+          
+          // Remove highlight after animation completes
+          setTimeout(() => {
+            this.newPostIds.set(new Set());
+          }, 2000);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading posts:', error);
+        this.snackBar.open('Error loading posts. Make sure the server is running.', 'Close', {
+          duration: 5000,
+        });
+        this.loading.set(false);
+      },
+    });
+  }
+
+  isNewPost(postId: string): boolean {
+    return this.newPostIds().has(postId);
   }
 
   openNewPostDialog(): void {

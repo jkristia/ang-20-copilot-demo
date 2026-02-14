@@ -38,4 +38,5 @@ step2:
 
 step3:
 - new posts should be highlighted for a brief moment after being added
+	- reloading should not cause any highlighting
 
