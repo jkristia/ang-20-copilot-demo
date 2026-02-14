@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { CreatePostDto } from '@blog/shared';
+import { CreatePostDto } from '../../models';
 
 export interface PostDialogData {
   mode: 'create' | 'edit';

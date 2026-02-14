@@ -1,0 +1,28 @@
+.config-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.config-card {
+  width: 100%;
+  max-width: 500px;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.form-field {
+  width: 100%;
+}
+
+mat-card-actions {
+  padding: 16px;
+}

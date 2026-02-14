@@ -8,6 +8,12 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script>
+    // Redirect to hash route if no hash present
+    if (!window.location.hash) {
+      window.location.replace(window.location.href + '#/');
+    }
+  </script>
 </head>
 <body>
   <app-root></app-root>

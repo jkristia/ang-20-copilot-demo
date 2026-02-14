@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,10 +8,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { PostService } from '../../services/post.service';
 import { WebSocketService } from '../../services/websocket.service';
-import { Post } from '@blog/shared';
+import { Post } from '../../models';
 import { PostDialogComponent } from '../post-dialog/post-dialog.component';
+import { APP_ROUTES } from '../../app.routes.constants';
 
 @Component({
   selector: 'app-posts-list',
@@ -23,6 +26,7 @@ import { PostDialogComponent } from '../post-dialog/post-dialog.component';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatTooltipModule,
   ],
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.scss',
@@ -33,6 +37,7 @@ export class PostsListComponent implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   posts = signal<Post[]>([]);
   loading = signal(false);
@@ -150,5 +155,9 @@ export class PostsListComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit',
     });
+  }
+
+  goToConfig(): void {
+    this.router.navigate([APP_ROUTES.CONFIG]);
   }
 }
