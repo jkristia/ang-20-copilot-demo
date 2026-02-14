@@ -40,3 +40,32 @@ step3:
 - new posts should be highlighted for a brief moment after being added
 	- reloading should not cause any highlighting
 
+step4:
+- add a new module 'democonfig', the purpose is to show a config page with multiple edit components
+	- keep changes in sync between clients
+	- config object must live on the server as it will be shared across all connected clients
+	- proposed config interface
+		```ts
+			enum SelectEnum {
+				value1 = 'value_1', // description should be 'Selected Value 1'
+				value2 = 'value_2', // description should be 'Selected Value 2'
+				value3 = 'value_3', // description should be 'Selected Value 3'
+			}
+			interface DemoConfig {
+				enabled: bool;
+				float_value: number;
+				int_value: number;
+				string_value: string;
+				select_value: SelectEnum
+			}
+		```
+	- client side
+		- add view under `#/demo-config`
+		- edit components should be aligned vertically, centered on the screen
+		- add a back button which navigates to the blog post view. This view will later be moved, so it should redirect to a const defined location
+		- add a config button, use gear icon, on the blog post page, click this button should navigate to demo-config. again this might change, so use const defined location
+		- float editor should allow float characters
+		- int editor should allow int characters
+		- string and select should only be anbled when  enabled = true
+		- changes should be reflected on all connected clients
+
