@@ -10,12 +10,16 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
+import { PostsGateway } from './posts.gateway';
 import type { Post as BlogPost } from '@blog/shared';
 import { CreatePostDto, UpdatePostDto } from '@blog/shared';
 
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly postsGateway: PostsGateway,
+  ) {}
 
   @Get()
   findAll(): BlogPost[] {
@@ -30,7 +34,9 @@ export class PostsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createPostDto: CreatePostDto): BlogPost {
-    return this.postsService.create(createPostDto);
+    const post = this.postsService.create(createPostDto);
+    this.postsGateway.emitPostsUpdate();
+    return post;
   }
 
   @Put(':id')
@@ -38,12 +44,15 @@ export class PostsController {
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
   ): BlogPost {
-    return this.postsService.update(id, updatePostDto);
+    const post = this.postsService.update(id, updatePostDto);
+    this.postsGateway.emitPostsUpdate();
+    return post;
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id') id: string): void {
     this.postsService.delete(id);
+    this.postsGateway.emitPostsUpdate();
   }
 }

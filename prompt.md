@@ -32,5 +32,10 @@ step1:
 step2:
 - add update notification
 	- any update to the posts on the backend should cause an update on the clients
+	- use whichever technology is recommended best practices
+- I expect any post on client1 will show almost immediately on client2
+	- if client 2 is adding or modifying a post, it must not be interupted, but the update should show aftewards
 
+step3:
+- new posts should be highlighted for a brief moment after being added
 

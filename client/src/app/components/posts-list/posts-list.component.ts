@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,7 +7,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { PostService } from '../../services/post.service';
+import { WebSocketService } from '../../services/websocket.service';
 import { Post } from '@blog/shared';
 import { PostDialogComponent } from '../post-dialog/post-dialog.component';
 
@@ -27,16 +29,30 @@ import { PostDialogComponent } from '../post-dialog/post-dialog.component';
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.scss',
 })
-export class PostsListComponent implements OnInit {
+export class PostsListComponent implements OnInit, OnDestroy {
   private readonly postService = inject(PostService);
+  private readonly webSocketService = inject(WebSocketService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
+  private wsSubscription?: Subscription;
 
   posts = signal<Post[]>([]);
   loading = signal(false);
 
   ngOnInit(): void {
     this.loadPosts();
+    
+    // Subscribe to WebSocket updates
+    this.wsSubscription = this.webSocketService.onPostsUpdated().subscribe(() => {
+      this.snackBar.open('Posts updated! Refreshing...', 'Close', {
+        duration: 2000,
+      });
+      this.loadPosts();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.wsSubscription?.unsubscribe();
   }
 
   loadPosts(): void {

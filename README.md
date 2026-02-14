@@ -2,12 +2,20 @@
 
 # Blog Posts Demo
 
-A simple blog post application with an Angular frontend and NestJS backend.
+A simple blog post application with an Angular frontend and NestJS backend, featuring real-time updates via WebSockets.
 
 ## Tech Stack
 
 - **Frontend**: Angular 19 with Angular Material
 - **Backend**: NestJS with in-memory data storage
+- **Real-time**: Socket.IO for live updates across clients
+- **Shared**: Common TypeScript interfaces between frontend and backend
+
+## Features
+
+- View, create, and manage blog posts
+- Real-time updates: changes made on one client are automatically reflected on all connected clients
+- Responsive Material Design UI
 
 ## Prerequisites
 
@@ -54,3 +62,19 @@ make client   # Start the Angular frontend client
 | POST   | /api/posts       | Create a new post    |
 | PUT    | /api/posts/:id   | Update a post        |
 | DELETE | /api/posts/:id   | Delete a post        |
+
+## WebSocket Events
+
+| Event           | Direction       | Description                          |
+|-----------------|-----------------|--------------------------------------|
+| posts:updated   | Server → Client | Emitted when posts are modified      |
+
+## Project Structure
+
+```
+├── client/          # Angular frontend
+├── server/          # NestJS backend
+├── shared/          # Shared TypeScript interfaces (@blog/shared)
+├── Makefile         # Build and run commands
+└── README.md
+```
