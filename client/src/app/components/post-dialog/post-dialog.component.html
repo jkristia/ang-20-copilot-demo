@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>
+  @if (data.mode === 'create') {
+    Create New Post
+  } @else {
+    Edit Post
+  }
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="post-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Topic</mat-label>
+      <input matInput formControlName="topic" placeholder="Enter post topic" />
+      @if (form.get('topic')?.hasError('required')) {
+        <mat-error>Topic is required</mat-error>
+      }
+      @if (form.get('topic')?.hasError('minlength')) {
+        <mat-error>Topic must be at least 3 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Message</mat-label>
+      <textarea
+        matInput
+        formControlName="message"
+        placeholder="Enter your message"
+        rows="5"
+      ></textarea>
+      @if (form.get('message')?.hasError('required')) {
+        <mat-error>Message is required</mat-error>
+      }
+      @if (form.get('message')?.hasError('minlength')) {
+        <mat-error>Message must be at least 10 characters</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="form.invalid"
+  >
+    @if (data.mode === 'create') {
+      Create
+    } @else {
+      Save
+    }
+  </button>
+</mat-dialog-actions>
