@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { DemoConfig, DEFAULT_DEMO_CONFIG } from '../../../shared/src/model.interfaces';
+import { IDemoConfig } from '../../../shared/src/model.interfaces';
+import { DemoConfig } from './demo.config';
 
 @Injectable()
 export class ConfigService {
-  private config: DemoConfig = { ...DEFAULT_DEMO_CONFIG };
+  private config: DemoConfig = new DemoConfig();
 
-  getConfig(): DemoConfig {
-    return { ...this.config };
+  getConfig(): IDemoConfig {
+    return this.config.toJSON();
   }
 
-  updateConfig(updates: Partial<DemoConfig>): DemoConfig {
-    this.config = {
-      ...this.config,
-      ...updates,
-    };
-    return { ...this.config };
+  updateConfig(updates: Partial<IDemoConfig>): IDemoConfig {
+    this.config.updateFrom(updates);
+    return this.config.toJSON();
   }
 }

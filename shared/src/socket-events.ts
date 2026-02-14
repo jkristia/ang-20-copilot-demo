@@ -2,7 +2,7 @@
  * WebSocket event names for type-safe socket communication
  */
 
-import type { DemoConfig } from './model.interfaces';
+import type { IDemoConfig } from './model.interfaces';
 
 /** Config-related socket events */
 export const ConfigSocketEvents = {
@@ -34,14 +34,14 @@ export type PostsSocketEvent = typeof PostsSocketEvents[keyof typeof PostsSocket
 
 /** Config: Events emitted from server to client */
 export interface ConfigServerToClientEvents {
-  [ConfigSocketEvents.CURRENT]: (config: DemoConfig) => void;
-  [ConfigSocketEvents.UPDATED]: (config: DemoConfig) => void;
+  [ConfigSocketEvents.CURRENT]: (config: IDemoConfig) => void;
+  [ConfigSocketEvents.UPDATED]: (config: IDemoConfig) => void;
 }
 
 /** Config: Events emitted from client to server */
 export interface ConfigClientToServerEvents {
   [ConfigSocketEvents.GET]: () => void;
-  [ConfigSocketEvents.UPDATE]: (updates: Partial<DemoConfig>) => void;
+  [ConfigSocketEvents.UPDATE]: (updates: Partial<IDemoConfig>) => void;
 }
 
 /** Posts: Events emitted from server to client */

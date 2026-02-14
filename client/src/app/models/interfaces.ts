@@ -6,10 +6,10 @@ export type {
   Post,
   CreatePostDto,
   UpdatePostDto,
-  DemoConfig,
+  IDemoConfig,
 } from '../../../../shared/src/model.interfaces';
 
-export { SelectEnum } from '../../../../shared/src/model.interfaces';
+export { SelectEnum, DemoConfigValidation } from '../../../../shared/src/model.interfaces';
 
 /**
  * Re-export socket event constants and interfaces from shared source

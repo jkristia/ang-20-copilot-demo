@@ -1,7 +1,7 @@
 import { Injectable, inject, DestroyRef, signal } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import {
-  DemoConfig,
+  IDemoConfig,
   DEFAULT_DEMO_CONFIG,
   ConfigSocketEvents,
   ConfigServerToClientEvents,
@@ -15,7 +15,7 @@ export class ConfigService {
   private socket: Socket<ConfigServerToClientEvents, ConfigClientToServerEvents>;
   private destroyRef = inject(DestroyRef);
 
-  config = signal<DemoConfig>(DEFAULT_DEMO_CONFIG);
+  config = signal<IDemoConfig>(DEFAULT_DEMO_CONFIG);
 
   constructor() {
     this.socket = io('http://localhost:3000', {
@@ -39,7 +39,7 @@ export class ConfigService {
     this.socket.emit(ConfigSocketEvents.GET);
   }
 
-  updateConfig(updates: Partial<DemoConfig>): void {
+  updateConfig(updates: Partial<IDemoConfig>): void {
     this.socket.emit(ConfigSocketEvents.UPDATE, updates);
   }
 }

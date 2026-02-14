@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ConfigService } from './config.service';
-import type { DemoConfig } from '../../../shared/src/model.interfaces';
+import type { IDemoConfig } from '../../../shared/src/model.interfaces';
 import {
   ConfigSocketEvents,
   ConfigServerToClientEvents,
@@ -34,7 +34,7 @@ export class ConfigGateway implements OnGatewayConnection {
 
   @SubscribeMessage(ConfigSocketEvents.UPDATE)
   handleConfigUpdate(
-    @MessageBody() updates: Partial<DemoConfig>,
+    @MessageBody() updates: Partial<IDemoConfig>,
     @ConnectedSocket() client: Socket,
   ): void {
     const updatedConfig = this.configService.updateConfig(updates);

@@ -1,18 +1,18 @@
 import { Controller, Get, Put, Body } from '@nestjs/common';
 import { ConfigService } from './config.service';
-import type { DemoConfig } from '../../../shared/src/model.interfaces';
+import type { IDemoConfig } from '../../../shared/src/model.interfaces';
 
 @Controller('config')
 export class ConfigController {
   constructor(private readonly configService: ConfigService) {}
 
   @Get()
-  getConfig(): DemoConfig {
+  getConfig(): IDemoConfig {
     return this.configService.getConfig();
   }
 
   @Put()
-  updateConfig(@Body() updates: Partial<DemoConfig>): DemoConfig {
+  updateConfig(@Body() updates: Partial<IDemoConfig>): IDemoConfig {
     return this.configService.updateConfig(updates);
   }
 }

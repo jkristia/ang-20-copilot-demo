@@ -12,6 +12,14 @@
   max-width: 500px;
 }
 
+mat-card-header {
+  .last-changed {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-top: 4px;
+  }
+}
+
 mat-card-content {
   display: flex;
   flex-direction: column;

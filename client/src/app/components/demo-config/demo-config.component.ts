@@ -8,9 +8,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { DatePipe } from '@angular/common';
 import { ConfigService } from '../../services/config.service';
 import { APP_ROUTES } from '../../app.routes.constants';
-import { SelectEnum, SelectEnumDescriptions } from '../../models';
+import { SelectEnum, SelectEnumDescriptions, DemoConfigValidation } from '../../models';
 
 @Component({
   selector: 'app-demo-config',
@@ -24,6 +25,7 @@ import { SelectEnum, SelectEnumDescriptions } from '../../models';
     MatSlideToggleModule,
     MatButtonModule,
     MatIconModule,
+    DatePipe,
   ],
   templateUrl: './demo-config.component.html',
   styleUrl: './demo-config.component.scss',
@@ -34,9 +36,11 @@ export class DemoConfigComponent implements OnInit {
 
   config = this.configService.config;
   isEnabled = computed(() => this.config().enabled);
+  lastChanged = computed(() => this.config().last_changed);
 
   selectOptions = Object.values(SelectEnum);
   selectDescriptions = SelectEnumDescriptions;
+  validation = DemoConfigValidation;
 
   ngOnInit(): void {
     this.configService.getConfig();

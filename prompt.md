@@ -70,3 +70,16 @@ step4:
 		- changes should be reflected on all connected clients
 	- socket must be typed, and interface defined in shared
 
+step5:
+- DemoConfig should be changed to a class instance. Current inteface renamed to IDemoConfig
+	- the config insyance lives for the duration of the config service
+	- each property is exposed through get / set
+	- min max validation to be added got
+		float_value: -10/10, default 1.01
+		int_value: 0/100, default 10
+		string_value, max length 20 characters
+	- when a value is set from the client (or API), it should be validated and adjusted to min/max value
+	- add a last_changed timestamp, this should be updated on any change
+	- expose this as a read only field in the client component
+	- of course any change is reflected on all clients
+
