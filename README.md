@@ -6,7 +6,7 @@ A simple blog post application with an Angular frontend and NestJS backend, feat
 
 ## Tech Stack
 
-- **Frontend**: Angular 19 with Angular Material
+- **Frontend**: Angular 20 with Angular Material
 - **Backend**: NestJS with in-memory data storage
 - **Real-time**: Socket.IO for live updates across clients
 - **Shared**: Common TypeScript interfaces between frontend and backend
