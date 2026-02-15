@@ -115,6 +115,24 @@ The Employees page (`/employees`) displays a data grid with 1000 employee record
 | manager_id         | number  | ID of manager (nullable)       |
 | performance_rating | number  | Rating 1-5                     |
 
+### Performance Benchmarks
+
+Tested on local development machine (localhost):
+
+| Rows     | JSON Response Size | API Response Time | Notes                          |
+|----------|-------------------|-------------------|--------------------------------|
+| 1,000    | 0.26 MB           | ~0.02s            | Default dataset                |
+| 10,000   | 2.6 MB            | ~0.05s            | Smooth virtual scrolling       |
+| 50,000   | 13.3 MB           | ~0.1s             | Grid handles well              |
+| 100,000  | 26.5 MB           | ~0.15s            | Slight delay on initial render |
+| 200,000  | 53.3 MB           | ~1.1s             | CSV parsing dominates time     |
+
+**Key Findings:**
+- AG Grid virtual scrolling handles 200k rows smoothly after initial load
+- The bottleneck is server-side CSV parsing (no caching implemented)
+- JSON payload scales linearly (~267 bytes per row)
+- For production, consider: server-side pagination, caching, or binary formats
+
 ## Mock Data Generation
 
 Mock data files are auto-generated when running `make server` if they don't exist. To force regeneration:
