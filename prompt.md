@@ -112,5 +112,10 @@ step7
 	- both components should be disabled if config enabled is false
 - refactor any duplicated code
 
+step8
+- save config (including last_modified timestamp), including block posts to json
+	- save 'should just happen'
+- load same config on start, this to make settings an posts persistent
+
 
 

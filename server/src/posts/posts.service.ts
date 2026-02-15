@@ -1,13 +1,30 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { Post, CreatePostDto, UpdatePostDto } from '../../../shared/src/model.interfaces';
 import { randomUUID } from 'crypto';
+import { PersistenceService } from '../persistence/persistence.service';
 
 @Injectable()
-export class PostsService {
+export class PostsService implements OnModuleInit {
   private posts: Post[] = [];
 
-  constructor() {
-    this.initializeMockPosts();
+  constructor(private readonly persistenceService: PersistenceService) {}
+
+  public onModuleInit(): void {
+    this.loadPosts();
+  }
+
+  private loadPosts(): void {
+    const savedPosts = this.persistenceService.loadPosts<Post>();
+    if (savedPosts && savedPosts.length > 0) {
+      this.posts = savedPosts;
+    } else {
+      this.initializeMockPosts();
+      this.savePosts();
+    }
+  }
+
+  private savePosts(): void {
+    this.persistenceService.savePosts(this.posts);
   }
 
   private initializeMockPosts(): void {
@@ -53,13 +70,13 @@ export class PostsService {
     }
   }
 
-  findAll(): Post[] {
+  public findAll(): Post[] {
     return this.posts.sort((a, b) => 
       new Date(b.date).getTime() - new Date(a.date).getTime()
     );
   }
 
-  findOne(id: string): Post {
+  public findOne(id: string): Post {
     const post = this.posts.find(p => p.id === id);
     if (!post) {
       throw new NotFoundException(`Post with ID ${id} not found`);
@@ -67,7 +84,7 @@ export class PostsService {
     return post;
   }
 
-  create(createPostDto: CreatePostDto): Post {
+  public create(createPostDto: CreatePostDto): Post {
     const newPost: Post = {
       id: randomUUID(),
       date: createPostDto.date ?? new Date().toISOString(),
@@ -75,10 +92,11 @@ export class PostsService {
       message: createPostDto.message,
     };
     this.posts.push(newPost);
+    this.savePosts();
     return newPost;
   }
 
-  update(id: string, updatePostDto: UpdatePostDto): Post {
+  public update(id: string, updatePostDto: UpdatePostDto): Post {
     const postIndex = this.posts.findIndex(p => p.id === id);
     if (postIndex === -1) {
       throw new NotFoundException(`Post with ID ${id} not found`);
@@ -89,14 +107,16 @@ export class PostsService {
       ...updatePostDto,
     };
     
+    this.savePosts();
     return this.posts[postIndex];
   }
 
-  delete(id: string): void {
+  public delete(id: string): void {
     const postIndex = this.posts.findIndex(p => p.id === id);
     if (postIndex === -1) {
       throw new NotFoundException(`Post with ID ${id} not found`);
     }
     this.posts.splice(postIndex, 1);
+    this.savePosts();
   }
 }
