@@ -1,4 +1,4 @@
-.PHONY: help server client install install-shared install-server install-client generate-data kill
+.PHONY: help server client install install-shared install-server install-client generate-data kill run-all
 
 .DEFAULT_GOAL := help
 
@@ -46,3 +46,10 @@ kill: ## Kill server (port 3000) and client (port 4200) if running
 	@-lsof -ti:3000 | xargs -r kill -9 2>/dev/null && echo "Killed server on port 3000" || true
 	@-lsof -ti:4200 | xargs -r kill -9 2>/dev/null && echo "Killed client on port 4200" || true
 	@-pkill -f "ng serve" 2>/dev/null && echo "Killed ng serve process" || true
+
+run-all: ensure-data ## Start client (background) and server (foreground)
+	@echo "Starting client in background..."
+	@cd client && npm start > /dev/null 2>&1 &
+	@sleep 2
+	@echo "Starting server..."
+	cd server && npm run start:dev

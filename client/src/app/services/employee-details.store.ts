@@ -46,7 +46,7 @@ export class EmployeeDetailsStore {
   public load(): void {
     this._loading.set(true);
     
-    this.employeeService.getEmployeeDetails({ take: 1000 }).subscribe({
+    this.employeeService.getEmployeeDetails({}).subscribe({
       next: (response) => {
         this._details.set(response.data);
         this._totalCount.set(response.total);

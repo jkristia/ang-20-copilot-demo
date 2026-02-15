@@ -146,3 +146,9 @@ goal is to create an angular 20 project simulating a block post site, including 
 - if necessary refactor API, but keep it clean as the same will be used for other tables, e.g. the employees table is next.
 	- update api.rest as needed
 
+## TODO
+- client table store should not cache the table once the last component is destroyed.
+	either the store should be injected at component level or
+	somecleanup must be done
+- remove the 1000 'take' from getData, for now all rows should be returned
+- 
