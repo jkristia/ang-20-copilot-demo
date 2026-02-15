@@ -2,6 +2,8 @@
 
 ## API Endpoints
 
+### Posts
+
 | Method | Endpoint         | Description          |
 |--------|------------------|----------------------|
 | GET    | /api/posts       | Get all posts        |
@@ -9,6 +11,23 @@
 | POST   | /api/posts       | Create a new post    |
 | PUT    | /api/posts/:id   | Update a post        |
 | DELETE | /api/posts/:id   | Delete a post        |
+
+### Employees
+
+| Method | Endpoint              | Description                              |
+|--------|-----------------------|------------------------------------------|
+| GET    | /api/employees        | Get employees (supports skip/take query) |
+| GET    | /api/employees/:id    | Get a single employee                    |
+
+The employees endpoint returns a paginated response:
+```json
+{
+  "data": [...],
+  "total": 1000,
+  "skip": 0,
+  "take": 100
+}
+```
 
 ## WebSocket Events
 
@@ -66,6 +85,35 @@ The Demo Config page (`/config`) demonstrates real-time configuration synchroniz
 ├── Makefile         # Build and run commands
 └── README.md
 ```
+
+## Employees Table
+
+The Employees page (`/employees`) displays a data grid with 1000 employee records using AG Grid Community.
+
+### Features
+
+- **Virtual Scrolling**: Smooth scrolling through large datasets without pagination
+- **Sortable Columns**: Click column headers to sort
+- **Filterable**: Built-in column filters
+- **Resizable Columns**: Drag column borders to resize
+- **Row Selection**: Single row selection support
+
+### Employee Data Fields
+
+| Field              | Type    | Description                    |
+|--------------------|---------|--------------------------------|
+| id                 | number  | Unique identifier              |
+| first_name         | string  | Employee first name            |
+| last_name          | string  | Employee last name             |
+| email              | string  | Email address                  |
+| department         | string  | Department name                |
+| job_title          | string  | Job title                      |
+| hire_date          | string  | Date hired (YYYY-MM-DD)        |
+| salary             | number  | Annual salary                  |
+| status             | string  | Active/Inactive/On Leave       |
+| location           | string  | Office location                |
+| manager_id         | number  | ID of manager (nullable)       |
+| performance_rating | number  | Rating 1-5                     |
 
 ## Mock Data Generation
 

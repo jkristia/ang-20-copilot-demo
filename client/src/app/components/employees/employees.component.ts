@@ -1,0 +1,104 @@
+import { Component, inject, signal, OnInit, computed } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ColDef } from 'ag-grid-community';
+import { Employee } from '@blog/shared';
+import { APP_ROUTES } from '../../app.routes.constants';
+import { EmployeeService } from '../../services/employee.service';
+import { DataGridComponent, DataGridConfig } from '../data-grid/data-grid.component';
+
+@Component({
+  selector: 'app-employees',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    DataGridComponent,
+  ],
+  templateUrl: './employees.component.html',
+  styleUrl: './employees.component.scss',
+})
+export class EmployeesComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly employeeService = inject(EmployeeService);
+
+  public readonly employees = signal<Employee[]>([]);
+  public readonly totalCount = signal<number>(0);
+  public readonly loading = signal<boolean>(false);
+  public readonly selectedEmployee = signal<Employee | undefined>(undefined);
+
+  /** Column definitions for the employee grid */
+  private readonly columnDefs: ColDef<Employee>[] = [
+    { field: 'id', headerName: 'ID', width: 80, flex: 0 },
+    { field: 'first_name', headerName: 'First Name' },
+    { field: 'last_name', headerName: 'Last Name' },
+    { field: 'email', headerName: 'Email', minWidth: 200 },
+    { field: 'department', headerName: 'Department' },
+    { field: 'job_title', headerName: 'Job Title', minWidth: 150 },
+    { field: 'hire_date', headerName: 'Hire Date', width: 120, flex: 0 },
+    { 
+      field: 'salary', 
+      headerName: 'Salary',
+      width: 110,
+      flex: 0,
+      valueFormatter: params => params.value ? `$${params.value.toLocaleString()}` : ''
+    },
+    { field: 'status', headerName: 'Status', width: 100, flex: 0 },
+    { field: 'location', headerName: 'Location' },
+    { 
+      field: 'performance_rating', 
+      headerName: 'Rating',
+      width: 90,
+      flex: 0,
+      cellRenderer: (params: { value: number }) => {
+        const rating = params.value;
+        return rating ? '★'.repeat(rating) + '☆'.repeat(5 - rating) : '';
+      }
+    },
+  ];
+
+  /** Grid configuration */
+  public readonly gridConfig = computed<DataGridConfig<Employee>>(() => ({
+    columnDefs: this.columnDefs,
+    rowSelection: 'single',
+    defaultColDef: {
+      sortable: true,
+      filter: true,
+      resizable: true,
+    },
+  }));
+
+  public ngOnInit(): void {
+    this.loadEmployees();
+  }
+
+  public goBack(): void {
+    this.router.navigate([APP_ROUTES.POSTS]);
+  }
+
+  public onRowSelected(employee: Employee | undefined): void {
+    this.selectedEmployee.set(employee);
+  }
+
+  private loadEmployees(): void {
+    this.loading.set(true);
+    this.employeeService.getEmployees({ take: 1000 }).subscribe({
+      next: (response) => {
+        this.employees.set(response.data);
+        this.totalCount.set(response.total);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load employees', err);
+        this.loading.set(false);
+      },
+    });
+  }
+}

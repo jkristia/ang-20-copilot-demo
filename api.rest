@@ -1,0 +1,44 @@
+### Variables
+@baseUrl = http://localhost:3000/api
+
+### ========================================
+### Employees API
+### ========================================
+
+### Get all employees (default: 1000 records)
+GET {{baseUrl}}/employees
+
+### Get employees with pagination
+GET {{baseUrl}}/employees?skip=0&take=10
+
+### Get employees - page 2
+GET {{baseUrl}}/employees?skip=10&take=10
+
+### Get single employee by ID
+GET {{baseUrl}}/employees/1
+
+### ========================================
+### Posts API
+### ========================================
+
+### Get all posts
+GET {{baseUrl}}/posts
+
+### Get single post (replace with actual ID)
+GET {{baseUrl}}/posts/1
+
+### Create a new post
+POST {{baseUrl}}/posts
+Content-Type: application/json
+
+{
+  "topic": "Test Post",
+  "message": "This is a test post created via REST Client"
+}
+
+### ========================================
+### Config API
+### ========================================
+
+### Get current config
+GET {{baseUrl}}/config

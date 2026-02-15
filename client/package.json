@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "^20.3.16",
     "@angular/router": "^20.3.16",
     "@blog/shared": "file:../shared",
+    "ag-grid-angular": "^35.1.0",
+    "ag-grid-community": "^35.1.0",
     "rxjs": "~7.8.0",
     "socket.io-client": "^4.8.3",
     "tslib": "^2.3.0",

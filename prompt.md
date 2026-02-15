@@ -117,5 +117,15 @@ goal is to create an angular 20 project simulating a block post site, including 
 	- save 'should just happen'
 - load same config on start, this to make settings an posts persistent
 
+## step9
+- add a page which initially will contain just a datagrid, ag-grid community but later will have a master-detail view and other components.
+	- the backend data should be read from a database later, in this case mocked, and return the employees.csv data
+		- later multiple tables will be added, so keep the acccess as a clean  db access layer
+	- for now, pass all data to the client, but this might later be changed to a virtual grid scrolling grid with remote data access, so api must include skip / take, and must return full data set size
+	- for now, build the table columns entirely on the client side, but keep in mind this later mighe be schema driven
+		- create the grid so it can easily be reused for other tables at a later point
+	- the page can be access from the posts page, add a 'table icon' button next to the settings button
+	- keep a 'Back to posts' button like the settings page
+
 
 

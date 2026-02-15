@@ -5,9 +5,18 @@ import { GatewayModule } from './gateway.module';
 import { PostsModule } from './posts/posts.module';
 import { ConfigModule } from './config/config.module';
 import { PersistenceModule } from './persistence/persistence.module';
+import { DataAccessModule } from './data-access';
+import { EmployeesModule } from './employees';
 
 @Module({
-  imports: [PersistenceModule, GatewayModule, PostsModule, ConfigModule],
+  imports: [
+    PersistenceModule,
+    DataAccessModule,
+    GatewayModule,
+    PostsModule,
+    ConfigModule,
+    EmployeesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

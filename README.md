@@ -6,9 +6,10 @@ A simple blog post application with an Angular frontend and NestJS backend, feat
 
 ## Tech Stack
 
-- **Frontend**: Angular 20 with Angular Material
+- **Frontend**: Angular 20 with Angular Material and AG Grid
 - **Backend**: NestJS with in-memory data storage
 - **Real-time**: Socket.IO for live updates across clients
+- **Data Grid**: AG Grid Community with virtual scrolling
 - **Shared**: Common TypeScript interfaces between frontend and backend
 
 ## Features
@@ -16,6 +17,7 @@ A simple blog post application with an Angular frontend and NestJS backend, feat
 - View, create, and manage blog posts
 - Real-time updates: changes made on one client are automatically reflected on all connected clients
 - **Demo Config Page**: Real-time synchronized configuration across all clients
+- **Employees Table**: AG Grid with virtual scrolling for 1000+ records
 - Responsive Material Design UI
 
 ## Prerequisites

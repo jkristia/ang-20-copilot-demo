@@ -160,4 +160,8 @@ export class PostsListComponent implements OnInit {
   goToConfig(): void {
     this.router.navigate([APP_ROUTES.CONFIG]);
   }
+
+  goToEmployees(): void {
+    this.router.navigate([APP_ROUTES.EMPLOYEES]);
+  }
 }

@@ -1,0 +1,33 @@
+<div class="employees-container">
+  <button mat-button color="primary" class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+    Back to Posts
+  </button>
+
+  <mat-card class="employees-card">
+    <mat-card-header>
+      <mat-card-title>Employees</mat-card-title>
+      <mat-card-subtitle>
+        Total: {{ totalCount() }} employees
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (loading()) {
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      } @else {
+        <div class="grid-container">
+          <app-data-grid
+            [rowData]="employees()"
+            [config]="gridConfig()"
+            [totalRows]="totalCount()"
+            [loading]="loading()"
+            (rowSelected)="onRowSelected($event)"
+          />
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
