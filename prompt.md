@@ -151,4 +151,5 @@ goal is to create an angular 20 project simulating a block post site, including 
 	either the store should be injected at component level or
 	somecleanup must be done
 - remove the 1000 'take' from getData, for now all rows should be returned
-- 
+- risk1: client table can get out of sync with backend when relying on update notifications only
+	- proposed fix: add a table revision (monotonic version) and include it in REST responses and socket updates; on gap/mismatch or reconnect, trigger a targeted REST refresh for that table or affected rows
