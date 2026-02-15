@@ -1,6 +1,6 @@
 goal is to create an angular 20 project simulating a block post site, including mock backend
 
-step1:
+## step1
 
 - create a node nestjs server for backend
 	- follow best practices for nestjs
@@ -29,18 +29,18 @@ step1:
 	- 'run client' should start client
 - model interface between server and client must be in a shared location
 
-step2:
+## step2
 - add update notification
 	- any update to the posts on the backend should cause an update on the clients
 	- use whichever technology is recommended best practices
 - I expect any post on client1 will show almost immediately on client2
 	- if client 2 is adding or modifying a post, it must not be interupted, but the update should show aftewards
 
-step3:
+## step3
 - new posts should be highlighted for a brief moment after being added
 	- reloading should not cause any highlighting
 
-step4:
+## step4
 - add a new module 'democonfig', the purpose is to show a config page with multiple edit components
 	- keep changes in sync between clients
 	- config object must live on the server as it will be shared across all connected clients
@@ -70,7 +70,7 @@ step4:
 		- changes should be reflected on all connected clients
 	- socket must be typed, and interface defined in shared
 
-step5:
+## step5
 - DemoConfig should be changed to a class instance. Current inteface renamed to IDemoConfig
 	- the config insyance lives for the duration of the config service
 	- each property is exposed through get / set
@@ -83,7 +83,7 @@ step5:
 	- expose this as a read only field in the client component
 	- of course any change is reflected on all clients
 
-step6:
+## step6
 - add a RunningState class and necessary interface.
 	- this state should be available system wide
 		- should have an num IDLE and RUNNING
@@ -100,7 +100,7 @@ step6:
 	- all edit fields in demo-config.component must be disabled when state is not IDLE
 - keep a single shared websocket for all services on client and all gateways on server
 
-step7
+## step7
 - missed from step6, any API changes is not allowed while state is RUNNING - add this
 - add another 2 classed,
 	- expose this as a property on the config class.
@@ -112,7 +112,7 @@ step7
 	- both components should be disabled if config enabled is false
 - refactor any duplicated code
 
-step8
+## step8
 - save config (including last_modified timestamp), including block posts to json
 	- save 'should just happen'
 - load same config on start, this to make settings an posts persistent
