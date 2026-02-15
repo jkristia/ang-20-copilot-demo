@@ -3,6 +3,7 @@
  */
 
 import type { IDemoConfig, IRunningState } from './model.interfaces';
+import type { EmployeeDetail, Employee } from './employee.interface';
 
 /** Config-related socket events */
 export const ConfigSocketEvents = {
@@ -36,6 +37,14 @@ export const RunningStateSocketEvents = {
   UPDATED: 'running-state:updated',
 } as const;
 
+/** Employee-related socket events */
+export const EmployeeSocketEvents = {
+  /** Server broadcasts that an employee detail was updated */
+  DETAIL_UPDATED: 'employee:detail-updated',
+  /** Server broadcasts that an employee was updated */
+  EMPLOYEE_UPDATED: 'employee:updated',
+} as const;
+
 /** Type for ConfigSocketEvents values */
 export type ConfigSocketEvent = typeof ConfigSocketEvents[keyof typeof ConfigSocketEvents];
 
@@ -44,6 +53,9 @@ export type PostsSocketEvent = typeof PostsSocketEvents[keyof typeof PostsSocket
 
 /** Type for RunningStateSocketEvents values */
 export type RunningStateSocketEvent = typeof RunningStateSocketEvents[keyof typeof RunningStateSocketEvents];
+
+/** Type for EmployeeSocketEvents values */
+export type EmployeeSocketEvent = typeof EmployeeSocketEvents[keyof typeof EmployeeSocketEvents];
 
 // =============================================================================
 // Socket.IO typed interfaces for Server<T> and Socket<T> generics
@@ -82,4 +94,15 @@ export interface RunningStateClientToServerEvents {
   [RunningStateSocketEvents.GET]: () => void;
   [RunningStateSocketEvents.SET_DURATION]: (duration: number) => void;
   [RunningStateSocketEvents.START]: () => void;
+}
+
+/** Employee: Events emitted from server to client */
+export interface EmployeeServerToClientEvents {
+  [EmployeeSocketEvents.DETAIL_UPDATED]: (detail: EmployeeDetail) => void;
+  [EmployeeSocketEvents.EMPLOYEE_UPDATED]: (employee: Employee) => void;
+}
+
+/** Employee: Events emitted from client to server */
+export interface EmployeeClientToServerEvents {
+  // Update requests go through REST API, not WebSocket
 }

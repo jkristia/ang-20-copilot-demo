@@ -5,8 +5,11 @@ import {
   PostsSocketEvents,
   ConfigSocketEvents,
   RunningStateSocketEvents,
+  EmployeeSocketEvents,
   IDemoConfig,
   IRunningState,
+  Employee,
+  EmployeeDetail,
 } from '../models';
 
 /**
@@ -18,6 +21,8 @@ interface ServerToClientEvents {
   [ConfigSocketEvents.UPDATED]: (config: IDemoConfig) => void;
   [RunningStateSocketEvents.CURRENT]: (state: IRunningState) => void;
   [RunningStateSocketEvents.UPDATED]: (state: IRunningState) => void;
+  [EmployeeSocketEvents.DETAIL_UPDATED]: (detail: EmployeeDetail) => void;
+  [EmployeeSocketEvents.EMPLOYEE_UPDATED]: (employee: Employee) => void;
 }
 
 interface ClientToServerEvents {
@@ -44,6 +49,10 @@ export class WebSocketService implements OnDestroy {
   // RunningState events
   private runningStateCurrent$ = new Subject<IRunningState>();
   private runningStateUpdated$ = new Subject<IRunningState>();
+
+  // Employee events
+  private employeeDetailUpdated$ = new Subject<EmployeeDetail>();
+  private employeeUpdated$ = new Subject<Employee>();
 
   constructor() {
     this.socket = io('http://localhost:3000', {
@@ -79,6 +88,15 @@ export class WebSocketService implements OnDestroy {
 
     this.socket.on(RunningStateSocketEvents.UPDATED, (state) => {
       this.runningStateUpdated$.next(state);
+    });
+
+    // Employee events
+    this.socket.on(EmployeeSocketEvents.DETAIL_UPDATED, (detail) => {
+      this.employeeDetailUpdated$.next(detail);
+    });
+
+    this.socket.on(EmployeeSocketEvents.EMPLOYEE_UPDATED, (employee) => {
+      this.employeeUpdated$.next(employee);
     });
   }
 
@@ -123,6 +141,15 @@ export class WebSocketService implements OnDestroy {
 
   startRunningState(): void {
     this.socket.emit(RunningStateSocketEvents.START);
+  }
+
+  // Employees
+  onEmployeeDetailUpdated(): Observable<EmployeeDetail> {
+    return this.employeeDetailUpdated$.asObservable();
+  }
+
+  onEmployeeUpdated(): Observable<Employee> {
+    return this.employeeUpdated$.asObservable();
   }
 
   ngOnDestroy(): void {

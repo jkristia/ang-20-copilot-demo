@@ -28,6 +28,7 @@ export {
   ConfigSocketEvents,
   PostsSocketEvents,
   RunningStateSocketEvents,
+  EmployeeSocketEvents,
 } from '../../../../shared/src/socket-events';
 
 export type {
@@ -37,4 +38,14 @@ export type {
   PostsClientToServerEvents,
   RunningStateServerToClientEvents,
   RunningStateClientToServerEvents,
+  EmployeeServerToClientEvents,
+  EmployeeClientToServerEvents,
 } from '../../../../shared/src/socket-events';
+
+/**
+ * Re-export employee interfaces from shared source
+ */
+export type {
+  Employee,
+  EmployeeDetail,
+} from '../../../../shared/src/employee.interface';

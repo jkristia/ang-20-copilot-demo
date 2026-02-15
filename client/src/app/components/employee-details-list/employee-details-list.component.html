@@ -1,7 +1,7 @@
 <div class="details-list-container">
   <div class="header">
     <span class="title">Employee Details</span>
-    <span class="subtitle">Total: {{ totalCount() }} records</span>
+    <span class="subtitle">Total: {{ totalCount() }} records (click cell to edit)</span>
   </div>
 
   @if (loading()) {
@@ -15,6 +15,7 @@
         [config]="gridConfig()"
         [totalRows]="totalCount()"
         [loading]="loading()"
+        (cellValueChanged)="onCellValueChanged($event)"
       />
     </div>
   }

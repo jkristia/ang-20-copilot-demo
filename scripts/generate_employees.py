@@ -301,7 +301,7 @@ def generate_employees() -> tuple[list[EmployeeRecord], list[EmployeeDetailRecor
             managers[dept].append(i)
 
     # Second pass: assign managers and generate details
-    for idx, row in enumerate(rows):
+    for row in rows:
         dept: str = row['department']
         if dept in managers and managers[dept]:
             potential_managers: list[int] = [m for m in managers[dept] if m != row['id']]

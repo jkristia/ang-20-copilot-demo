@@ -1,11 +1,13 @@
-import { Component, inject, signal, OnInit, computed } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ColDef } from 'ag-grid-community';
 import { Employee } from '@blog/shared';
 import { EmployeeService } from '../../services/employee.service';
+import { WebSocketService } from '../../services/websocket.service';
 import { DataGridComponent, DataGridConfig } from '../data-grid/data-grid.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-employees-list',
@@ -19,8 +21,12 @@ import { DataGridComponent, DataGridConfig } from '../data-grid/data-grid.compon
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
 })
-export class EmployeesListComponent implements OnInit {
+export class EmployeesListComponent implements OnInit, OnDestroy {
   private readonly employeeService = inject(EmployeeService);
+  private readonly wsService = inject(WebSocketService);
+  private readonly destroy$ = new Subject<void>();
+
+  @ViewChild(DataGridComponent) private dataGrid?: DataGridComponent<Employee>;
 
   public readonly employees = signal<Employee[]>([]);
   public readonly totalCount = signal<number>(0);
@@ -66,10 +72,17 @@ export class EmployeesListComponent implements OnInit {
       filter: true,
       resizable: true,
     },
+    getRowId: (data) => data.id,
   }));
 
   public ngOnInit(): void {
     this.loadEmployees();
+    this.subscribeToUpdates();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public onRowSelected(employee: Employee | undefined): void {
@@ -89,5 +102,19 @@ export class EmployeesListComponent implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  /** Subscribe to WebSocket updates from other clients */
+  private subscribeToUpdates(): void {
+    this.wsService.onEmployeeUpdated()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((updatedEmployee) => {
+        // Update the grid row when employee name/email changes from details edit
+        this.dataGrid?.updateRowData(updatedEmployee.id, updatedEmployee);
+        // Also update the signal data
+        this.employees.update(employees => 
+          employees.map(e => e.id === updatedEmployee.id ? updatedEmployee : e)
+        );
+      });
   }
 }

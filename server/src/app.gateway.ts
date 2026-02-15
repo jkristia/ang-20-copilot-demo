@@ -17,7 +17,9 @@ import {
   ConfigSocketEvents,
   RunningStateSocketEvents,
   PostsSocketEvents,
+  EmployeeSocketEvents,
 } from '../../shared/src/socket-events';
+import type { Employee, EmployeeDetail } from '@blog/shared';
 
 /**
  * Combined server-to-client events
@@ -28,6 +30,8 @@ interface ServerToClientEvents {
   [ConfigSocketEvents.UPDATED]: (config: IDemoConfig) => void;
   [RunningStateSocketEvents.CURRENT]: (state: IRunningState) => void;
   [RunningStateSocketEvents.UPDATED]: (state: IRunningState) => void;
+  [EmployeeSocketEvents.DETAIL_UPDATED]: (detail: EmployeeDetail) => void;
+  [EmployeeSocketEvents.EMPLOYEE_UPDATED]: (employee: Employee) => void;
 }
 
 /**
@@ -132,5 +136,23 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect, OnG
   handleStart(): void {
     this.runningStateService.start();
     // Updates will be broadcast via the callback
+  }
+
+  // =========================================================================
+  // Employees
+  // =========================================================================
+
+  /**
+   * Emit an employee detail update event to all connected clients
+   */
+  emitEmployeeDetailUpdate(detail: EmployeeDetail): void {
+    this.server.emit(EmployeeSocketEvents.DETAIL_UPDATED, detail);
+  }
+
+  /**
+   * Emit an employee update event to all connected clients
+   */
+  emitEmployeeUpdate(employee: Employee): void {
+    this.server.emit(EmployeeSocketEvents.EMPLOYEE_UPDATED, employee);
   }
 }

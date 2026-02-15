@@ -20,6 +20,7 @@
 | GET    | /api/employees/:id        | Get a single employee                        |
 | GET    | /api/employees/details    | Get employee details (supports skip/take)    |
 | GET    | /api/employees/:id/details| Get details for a specific employee          |
+| PATCH  | /api/employees/:id/details| Update employee detail fields                |
 
 The employees endpoint returns a paginated response:
 ```json
@@ -30,6 +31,16 @@ The employees endpoint returns a paginated response:
   "take": 100
 }
 ```
+
+The PATCH endpoint accepts partial updates (only changed fields):
+```json
+{
+  "first_name": "NewFirstName",
+  "last_name": "NewLastName"
+}
+```
+
+Returns the updated `EmployeeDetail` record. Returns `400 Bad Request` if name fields are empty.
 
 ## WebSocket Events
 
@@ -47,6 +58,13 @@ The employees endpoint returns a paginated response:
 | config:update   | Client → Server | Send configuration changes                     |
 | config:current  | Server → Client | Sends current config (on connect or request)   |
 | config:updated  | Server → Client | Broadcasts config changes to all clients       |
+
+### Employee Events
+
+| Event                  | Direction       | Description                                    |
+|------------------------|-----------------|------------------------------------------------|
+| employee:detail-updated| Server → Client | Broadcasts detail field changes to all clients |
+| employee:updated       | Server → Client | Broadcasts employee record changes (name/email)|
 
 ## Demo Config Page
 
@@ -93,7 +111,7 @@ The Demo Config page (`/config`) demonstrates real-time configuration synchroniz
 The Employees page (`/employees`) displays a data grid with 1000 employee records using AG Grid Community. The page has two tabs:
 
 - **Employees** (`/employees`): Main employee list with core fields
-- **Details** (`/employees/details`): Extended employee information
+- **Details** (`/employees/details`): Extended employee information with inline editing
 
 ### Features
 
@@ -102,6 +120,29 @@ The Employees page (`/employees`) displays a data grid with 1000 employee record
 - **Filterable**: Built-in column filters
 - **Resizable Columns**: Drag column borders to resize
 - **Row Selection**: Single row selection support
+- **Inline Editing** (Details tab): Single-click cell editing with validation
+- **Real-time Sync**: Edits broadcast to all connected clients via WebSocket
+- **Persistent Storage**: Changes saved to CSV files on the backend
+
+### Editing Employee Details
+
+The Details tab supports inline cell editing with the following behavior:
+
+1. **Click any cell** to enter edit mode (except `employee_id` which is read-only)
+2. **Press Enter or Tab** to save changes, or **Escape** to cancel
+3. **Validation**: Empty `first_name` or `last_name` values are rejected
+4. **Cross-table Updates**: When `first_name` or `last_name` is modified:
+   - The `employees.csv` record is also updated
+   - The employee's email is regenerated
+   - Both grids reflect the change in real-time
+
+### Testing Real-time Editing
+
+1. Open the app in two or more browser windows
+2. Navigate to `/employees/details` in each window
+3. Click a cell to edit it and change the value
+4. Observe the change instantly appearing in all other windows
+5. Switch to the Employees tab to see name changes reflected there too
 
 ### Employee Data Fields
 

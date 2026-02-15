@@ -19,6 +19,7 @@ A simple blog post application with an Angular frontend and NestJS backend, feat
 - **Demo Config Page**: Real-time synchronized configuration across all clients
 - **Employees Table**: AG Grid with virtual scrolling for 1000+ records
 - **Tabbed Employee Views**: Employees list and Employee Details on separate tabs at `/employees`
+- **Editable Employee Details**: Inline cell editing with validation, persisted to CSV, synced via WebSocket
 - Responsive Material Design UI
 
 ## Prerequisites

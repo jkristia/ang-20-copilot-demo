@@ -1,4 +1,4 @@
-.PHONY: help server client install install-shared install-server install-client generate-data
+.PHONY: help server client install install-shared install-server install-client generate-data kill
 
 .DEFAULT_GOAL := help
 
@@ -41,3 +41,7 @@ client: ## Start the Angular frontend client
 generate-data: ## Regenerate all mock data (forces regeneration)
 	@rm -f $(MOCK_EMPLOYEES)
 	@$(MAKE) ensure-data
+
+kill: ## Kill server (port 3000) and client (port 4200) if running
+	@-lsof -ti:3000 | xargs kill -9 2>/dev/null && echo "Killed server on port 3000" || true
+	@-lsof -ti:4200 | xargs kill -9 2>/dev/null && echo "Killed client on port 4200" || true

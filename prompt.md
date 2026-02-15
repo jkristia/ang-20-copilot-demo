@@ -133,6 +133,16 @@ goal is to create an angular 20 project simulating a block post site, including 
 	- I want 2 tabs | Employees | Details |
 	- http://localhost:4200/#/employees should show the current employees table
 	- http://localhost:4200/#/employees/details should show the details table
-	
 
+
+## step11
+- the goal is to add edit support, pretend the backend is a database to whic hwe write
+- make field in details table editable, 
+	- if first name, last name is modified, the employee table should be updated as well to reflect this change
+	- empty name and last name is not allowed
+- all changes must be pushed to the back end table
+- all changes must be reflected on other connected clients (like for the demo-config-page)
+- all changes must be saved to file (it is ok if this is slow, it is just a mock backend)
+- if necessary refactor API, but keep it clean as the same will be used for other tables, e.g. the employees table is next.
+	- update api.rest as needed
 

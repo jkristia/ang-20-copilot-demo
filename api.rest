@@ -33,6 +33,15 @@ GET {{baseUrl}}/employees/details?skip=10&take=10
 ### Get details for a specific employee
 GET {{baseUrl}}/employees/1/details
 
+### Update employee detail (first_name, last_name)
+PATCH {{baseUrl}}/employees/1/details
+Content-Type: application/json
+
+{
+  "first_name": "UpdatedFirst",
+  "last_name": "UpdatedLast"
+}
+
 ### ========================================
 ### Posts API
 ### ========================================

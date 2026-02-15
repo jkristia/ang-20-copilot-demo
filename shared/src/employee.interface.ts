@@ -73,3 +73,32 @@ export interface PaginatedQuery {
   skip?: number;
   take?: number;
 }
+
+/**
+ * DTO for updating an employee detail record
+ */
+export interface UpdateEmployeeDetailDto {
+  first_name?: string;
+  last_name?: string;
+  date_of_birth?: string;
+  gender?: string;
+  marital_status?: string;
+  dependents?: number;
+  nationality?: string;
+  street_address?: string;
+  city?: string;
+  state?: string;
+  postal_code?: string;
+  mobile_phone?: string;
+  work_phone?: string;
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
+  emergency_contact_relationship?: string;
+  bank_name?: string;
+  blood_type?: string;
+  medical_conditions?: string;
+  allergies?: string;
+  dietary_restrictions?: string;
+  shirt_size?: string;
+  notes?: string;
+}
