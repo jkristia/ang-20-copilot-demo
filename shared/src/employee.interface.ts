@@ -22,6 +22,8 @@ export interface Employee {
  */
 export interface EmployeeDetail {
   employee_id: number;
+  first_name: string;
+  last_name: string;
   date_of_birth: string;
   gender: string;
   marital_status: string;

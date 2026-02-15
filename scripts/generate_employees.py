@@ -31,6 +31,8 @@ class EmployeeRecord(TypedDict):
 
 class EmployeeDetailRecord(TypedDict):
     employee_id: int
+    first_name: str
+    last_name: str
     date_of_birth: str
     gender: str
     marital_status: str
@@ -70,13 +72,19 @@ OUTPUT_DETAILS_FILE: str = os.path.join(OUTPUT_DIR, 'employee_details.csv')
 NUM_EMPLOYEES: int = 1000
 
 # Data pools
-FIRST_NAMES: list[str] = [
-    'James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer', 'Michael', 'Linda', 'William', 'Elizabeth',
-    'David', 'Barbara', 'Richard', 'Susan', 'Joseph', 'Jessica', 'Thomas', 'Sarah', 'Charles', 'Karen',
-    'Christopher', 'Lisa', 'Daniel', 'Nancy', 'Matthew', 'Betty', 'Anthony', 'Margaret', 'Mark', 'Sandra',
-    'Donald', 'Ashley', 'Steven', 'Kimberly', 'Paul', 'Emily', 'Andrew', 'Donna', 'Joshua', 'Michelle',
-    'Kenneth', 'Dorothy', 'Kevin', 'Carol', 'Brian', 'Amanda', 'George', 'Melissa', 'Timothy', 'Deborah'
+MALE_FIRST_NAMES: list[str] = [
+    'James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas', 'Charles',
+    'Christopher', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Donald', 'Steven', 'Paul', 'Andrew', 'Joshua',
+    'Kenneth', 'Kevin', 'Brian', 'George', 'Timothy'
 ]
+
+FEMALE_FIRST_NAMES: list[str] = [
+    'Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen',
+    'Lisa', 'Nancy', 'Betty', 'Margaret', 'Sandra', 'Ashley', 'Kimberly', 'Emily', 'Donna', 'Michelle',
+    'Dorothy', 'Carol', 'Amanda', 'Melissa', 'Deborah'
+]
+
+FIRST_NAMES: list[str] = MALE_FIRST_NAMES + FEMALE_FIRST_NAMES
 
 LAST_NAMES: list[str] = [
     'Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez',
@@ -207,7 +215,7 @@ def generate_dob(hire_date: str) -> str:
 
 
 def generate_employee_detail(employee_id: int, first_name: str, last_name: str, 
-                             location: str, hire_date: str) -> EmployeeDetailRecord:
+                             location: str, hire_date: str, gender: str) -> EmployeeDetailRecord:
     """Generate detailed personal information for an employee."""
     state_code = STATE_CODES.get(location, 'NY')
     emergency_first = random.choice(FIRST_NAMES)
@@ -215,8 +223,10 @@ def generate_employee_detail(employee_id: int, first_name: str, last_name: str,
     
     return {
         'employee_id': employee_id,
+        'first_name': first_name,
+        'last_name': last_name,
         'date_of_birth': generate_dob(hire_date),
-        'gender': random.choice(GENDERS),
+        'gender': gender,
         'marital_status': random.choice(MARITAL_STATUSES),
         'dependents': random.choices([0, 0, 0, 1, 1, 2, 2, 3, 4], k=1)[0],
         'nationality': random.choice(NATIONALITIES),
@@ -256,7 +266,14 @@ def generate_employees() -> tuple[list[EmployeeRecord], list[EmployeeDetailRecor
 
     # First pass: create all employees
     for i in range(1, NUM_EMPLOYEES + 1):
-        first: str = random.choice(FIRST_NAMES)
+        # Choose gender first, then pick appropriate name
+        is_male = random.random() < 0.5
+        if is_male:
+            first: str = random.choice(MALE_FIRST_NAMES)
+            gender: str = 'Male'
+        else:
+            first: str = random.choice(FEMALE_FIRST_NAMES)
+            gender: str = 'Female'
         last: str = random.choice(LAST_NAMES)
         dept: str = random.choice(DEPARTMENTS)
         title: str = random.choice(JOB_TITLES[dept])
@@ -284,17 +301,24 @@ def generate_employees() -> tuple[list[EmployeeRecord], list[EmployeeDetailRecor
             managers[dept].append(i)
 
     # Second pass: assign managers and generate details
-    for row in rows:
+    for idx, row in enumerate(rows):
         dept: str = row['department']
         if dept in managers and managers[dept]:
             potential_managers: list[int] = [m for m in managers[dept] if m != row['id']]
             if potential_managers:
                 row['manager_id'] = random.choice(potential_managers)
         
+        # Determine gender from first name
+        first_name = row['first_name']
+        if first_name in MALE_FIRST_NAMES:
+            gender = 'Male'
+        else:
+            gender = 'Female'
+        
         # Generate detail record for this employee
         detail = generate_employee_detail(
             row['id'], row['first_name'], row['last_name'],
-            row['location'], row['hire_date']
+            row['location'], row['hire_date'], gender
         )
         details.append(detail)
 
@@ -320,7 +344,7 @@ def write_employees_csv(rows: list[EmployeeRecord]) -> None:
 def write_details_csv(details: list[EmployeeDetailRecord]) -> None:
     """Write employee detail records to CSV file."""
     fieldnames = [
-        'employee_id', 'date_of_birth', 'gender', 'marital_status', 'dependents',
+        'employee_id', 'first_name', 'last_name', 'date_of_birth', 'gender', 'marital_status', 'dependents',
         'nationality', 'ssn', 'street_address', 'city', 'state', 'postal_code', 'country',
         'home_phone', 'mobile_phone', 'work_phone', 'work_extension',
         'emergency_contact_name', 'emergency_contact_phone', 'emergency_contact_relationship',

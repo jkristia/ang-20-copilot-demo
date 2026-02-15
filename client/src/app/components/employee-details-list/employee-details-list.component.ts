@@ -26,7 +26,9 @@ export class EmployeeDetailsListComponent implements OnInit {
 
   /** Column definitions for the employee details grid */
   private readonly columnDefs: ColDef<EmployeeDetail>[] = [
-    { field: 'employee_id', headerName: 'Emp ID', width: 90, flex: 0 },
+    { field: 'employee_id', headerName: 'ID', width: 70, flex: 0 },
+    { field: 'first_name', headerName: 'First Name', width: 120 },
+    { field: 'last_name', headerName: 'Last Name', width: 120 },
     { field: 'date_of_birth', headerName: 'DOB', width: 110, flex: 0 },
     { field: 'gender', headerName: 'Gender', width: 100, flex: 0 },
     { field: 'marital_status', headerName: 'Marital Status', width: 130 },
