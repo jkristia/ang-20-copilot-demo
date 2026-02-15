@@ -7,12 +7,6 @@ import type { EmployeeDetail, Employee } from './employee.interface';
 
 /** Config-related socket events */
 export const ConfigSocketEvents = {
-  /** Client requests current config */
-  GET: 'config:get',
-  /** Client sends config update */
-  UPDATE: 'config:update',
-  /** Server sends current config (response to GET or on connect) */
-  CURRENT: 'config:current',
   /** Server broadcasts config update to all clients */
   UPDATED: 'config:updated',
 } as const;
@@ -25,14 +19,6 @@ export const PostsSocketEvents = {
 
 /** RunningState-related socket events */
 export const RunningStateSocketEvents = {
-  /** Client requests current state */
-  GET: 'running-state:get',
-  /** Client updates run_duration */
-  SET_DURATION: 'running-state:set-duration',
-  /** Client requests to start running */
-  START: 'running-state:start',
-  /** Server sends current state (response to GET or on connect) */
-  CURRENT: 'running-state:current',
   /** Server broadcasts state update to all clients */
   UPDATED: 'running-state:updated',
 } as const;
@@ -63,14 +49,12 @@ export type EmployeeSocketEvent = typeof EmployeeSocketEvents[keyof typeof Emplo
 
 /** Config: Events emitted from server to client */
 export interface ConfigServerToClientEvents {
-  [ConfigSocketEvents.CURRENT]: (config: IDemoConfig) => void;
   [ConfigSocketEvents.UPDATED]: (config: IDemoConfig) => void;
 }
 
 /** Config: Events emitted from client to server */
 export interface ConfigClientToServerEvents {
-  [ConfigSocketEvents.GET]: () => void;
-  [ConfigSocketEvents.UPDATE]: (updates: Partial<IDemoConfig>) => void;
+  // Data operations go through REST API, not WebSocket
 }
 
 /** Posts: Events emitted from server to client */
@@ -85,15 +69,12 @@ export interface PostsClientToServerEvents {
 
 /** RunningState: Events emitted from server to client */
 export interface RunningStateServerToClientEvents {
-  [RunningStateSocketEvents.CURRENT]: (state: IRunningState) => void;
   [RunningStateSocketEvents.UPDATED]: (state: IRunningState) => void;
 }
 
 /** RunningState: Events emitted from client to server */
 export interface RunningStateClientToServerEvents {
-  [RunningStateSocketEvents.GET]: () => void;
-  [RunningStateSocketEvents.SET_DURATION]: (duration: number) => void;
-  [RunningStateSocketEvents.START]: () => void;
+  // Data operations go through REST API, not WebSocket
 }
 
 /** Employee: Events emitted from server to client */

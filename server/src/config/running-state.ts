@@ -90,6 +90,13 @@ export class RunningState implements IRunningState {
   }
 
   /**
+   * Emit an update notification without changing state
+   */
+  emitUpdate(): void {
+    this.notifyUpdate();
+  }
+
+  /**
    * Converts to plain object (IRunningState)
    */
   toJSON(): IRunningState {

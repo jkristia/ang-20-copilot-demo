@@ -67,3 +67,36 @@ Content-Type: application/json
 
 ### Get current config
 GET {{baseUrl}}/config
+
+### Update config (partial)
+PUT {{baseUrl}}/config
+Content-Type: application/json
+
+{
+  "enabled": true,
+  "float_value": 1.5,
+  "int_value": 12,
+  "string_value": "Updated",
+  "select_value": "value_2"
+}
+
+### ========================================
+### Running State API
+### ========================================
+
+### Get current running state
+GET {{baseUrl}}/running-state
+
+### Set run duration
+PUT {{baseUrl}}/running-state/duration
+Content-Type: application/json
+
+{
+  "run_duration": 7
+}
+
+### Start running state
+POST {{baseUrl}}/running-state/start
+Content-Type: application/json
+
+{}

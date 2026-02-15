@@ -1,10 +1,17 @@
-import { Controller, Get, Put, Body } from '@nestjs/common';
+import { Controller, Get, Put, Body, Inject, forwardRef, ConflictException } from '@nestjs/common';
 import { ConfigService } from './config.service';
 import type { IDemoConfig } from '../../../shared/src/model.interfaces';
+import { AppGateway } from '../app.gateway';
+import { RunningStateService } from './running-state.service';
 
 @Controller('config')
 export class ConfigController {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly runningStateService: RunningStateService,
+    @Inject(forwardRef(() => AppGateway))
+    private readonly appGateway: AppGateway,
+  ) { }
 
   @Get()
   getConfig(): IDemoConfig {
@@ -13,6 +20,11 @@ export class ConfigController {
 
   @Put()
   updateConfig(@Body() updates: Partial<IDemoConfig>): IDemoConfig {
-    return this.configService.updateConfig(updates);
+    if (!this.runningStateService.isIdle()) {
+      throw new ConflictException('Config update rejected: system is running');
+    }
+    const updatedConfig = this.configService.updateConfig(updates);
+    this.appGateway.emitConfigUpdate(updatedConfig);
+    return updatedConfig;
   }
 }

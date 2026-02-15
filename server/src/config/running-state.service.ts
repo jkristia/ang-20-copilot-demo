@@ -35,6 +35,7 @@ export class RunningStateService {
 
   setDuration(duration: number): IRunningState {
     this.runningState.run_duration = duration;
+    this.runningState.emitUpdate();
     return this.runningState.toJSON();
   }
 

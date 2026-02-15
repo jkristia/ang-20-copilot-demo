@@ -3,14 +3,17 @@
  * Import directly from source to avoid build dependency on dist
  */
 export type {
-  Post,
-  CreatePostDto,
-  UpdatePostDto,
   IDemoConfig,
   IRunningState,
   INetworkSettings,
   IDisplaySettings,
 } from '../../../../shared/src/model.interfaces';
+
+export type {
+  Post,
+  CreatePostDto,
+  UpdatePostDto,
+} from '../../../../shared/src/post.interface';
 
 export {
   SelectEnum,

@@ -17,20 +17,14 @@ import {
  */
 interface ServerToClientEvents {
   [PostsSocketEvents.UPDATED]: () => void;
-  [ConfigSocketEvents.CURRENT]: (config: IDemoConfig) => void;
   [ConfigSocketEvents.UPDATED]: (config: IDemoConfig) => void;
-  [RunningStateSocketEvents.CURRENT]: (state: IRunningState) => void;
   [RunningStateSocketEvents.UPDATED]: (state: IRunningState) => void;
   [EmployeeSocketEvents.DETAIL_UPDATED]: (detail: EmployeeDetail) => void;
   [EmployeeSocketEvents.EMPLOYEE_UPDATED]: (employee: Employee) => void;
 }
 
 interface ClientToServerEvents {
-  [ConfigSocketEvents.GET]: () => void;
-  [ConfigSocketEvents.UPDATE]: (updates: Partial<IDemoConfig>) => void;
-  [RunningStateSocketEvents.GET]: () => void;
-  [RunningStateSocketEvents.SET_DURATION]: (duration: number) => void;
-  [RunningStateSocketEvents.START]: () => void;
+  // Data operations go through REST API, not WebSocket
 }
 
 @Injectable({
@@ -38,16 +32,14 @@ interface ClientToServerEvents {
 })
 export class WebSocketService implements OnDestroy {
   private socket: Socket<ServerToClientEvents, ClientToServerEvents>;
-  
+
   // Posts events
   private postsUpdated$ = new Subject<void>();
-  
+
   // Config events
-  private configCurrent$ = new Subject<IDemoConfig>();
   private configUpdated$ = new Subject<IDemoConfig>();
-  
+
   // RunningState events
-  private runningStateCurrent$ = new Subject<IRunningState>();
   private runningStateUpdated$ = new Subject<IRunningState>();
 
   // Employee events
@@ -72,20 +64,11 @@ export class WebSocketService implements OnDestroy {
       this.postsUpdated$.next();
     });
 
-    // Config events
-    this.socket.on(ConfigSocketEvents.CURRENT, (config) => {
-      this.configCurrent$.next(config);
-    });
-
     this.socket.on(ConfigSocketEvents.UPDATED, (config) => {
       this.configUpdated$.next(config);
     });
 
     // RunningState events
-    this.socket.on(RunningStateSocketEvents.CURRENT, (state) => {
-      this.runningStateCurrent$.next(state);
-    });
-
     this.socket.on(RunningStateSocketEvents.UPDATED, (state) => {
       this.runningStateUpdated$.next(state);
     });
@@ -106,41 +89,13 @@ export class WebSocketService implements OnDestroy {
   }
 
   // Config
-  onConfigCurrent(): Observable<IDemoConfig> {
-    return this.configCurrent$.asObservable();
-  }
-
   onConfigUpdated(): Observable<IDemoConfig> {
     return this.configUpdated$.asObservable();
   }
 
-  getConfig(): void {
-    this.socket.emit(ConfigSocketEvents.GET);
-  }
-
-  updateConfig(updates: Partial<IDemoConfig>): void {
-    this.socket.emit(ConfigSocketEvents.UPDATE, updates);
-  }
-
   // RunningState
-  onRunningStateCurrent(): Observable<IRunningState> {
-    return this.runningStateCurrent$.asObservable();
-  }
-
   onRunningStateUpdated(): Observable<IRunningState> {
     return this.runningStateUpdated$.asObservable();
-  }
-
-  getRunningState(): void {
-    this.socket.emit(RunningStateSocketEvents.GET);
-  }
-
-  setRunningStateDuration(duration: number): void {
-    this.socket.emit(RunningStateSocketEvents.SET_DURATION, duration);
-  }
-
-  startRunningState(): void {
-    this.socket.emit(RunningStateSocketEvents.START);
   }
 
   // Employees

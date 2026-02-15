@@ -1,5 +1,9 @@
 # Project Details
 
+## Swagger / OpenAPI
+
+Swagger UI is available at http://localhost:3000/openapi when the server is running. The generated OpenAPI spec lives at [server/openapi.yaml](server/openapi.yaml), and can be inspected with Swagger Editor (https://editor.swagger.io) by importing the file. Note: OpenAPI schemas are generated from Swagger-decorated DTO classes; shared TypeScript interfaces are not reflected in the spec.
+
 ## API Endpoints
 
 ### Posts
@@ -42,6 +46,21 @@ The PATCH endpoint accepts partial updates (only changed fields):
 
 Returns the updated `EmployeeDetail` record. Returns `400 Bad Request` if name fields are empty.
 
+### Config
+
+| Method | Endpoint     | Description                      |
+|--------|--------------|----------------------------------|
+| GET    | /api/config  | Get current configuration        |
+| PUT    | /api/config  | Update configuration (partial)   |
+
+### Running State
+
+| Method | Endpoint                    | Description                  |
+|--------|-----------------------------|------------------------------|
+| GET    | /api/running-state          | Get current running state    |
+| PUT    | /api/running-state/duration | Set run duration             |
+| POST   | /api/running-state/start    | Start running state timer    |
+
 ## WebSocket Events
 
 ### Posts Events
@@ -54,10 +73,13 @@ Returns the updated `EmployeeDetail` record. Returns `400 Bad Request` if name f
 
 | Event           | Direction       | Description                                    |
 |-----------------|-----------------|------------------------------------------------|
-| config:get      | Client → Server | Request current configuration                  |
-| config:update   | Client → Server | Send configuration changes                     |
-| config:current  | Server → Client | Sends current config (on connect or request)   |
 | config:updated  | Server → Client | Broadcasts config changes to all clients       |
+
+### Running State Events
+
+| Event                | Direction       | Description                                    |
+|----------------------|-----------------|------------------------------------------------|
+| running-state:updated| Server → Client | Broadcasts running state updates to all clients|
 
 ### Employee Events
 
@@ -68,13 +90,13 @@ Returns the updated `EmployeeDetail` record. Returns `400 Bad Request` if name f
 
 ## Demo Config Page
 
-The Demo Config page (`/config`) demonstrates real-time configuration synchronization across multiple clients using WebSockets.
+The Demo Config page (`/config`) demonstrates real-time configuration synchronization across multiple clients. Data operations use REST, while updates are broadcast via WebSockets.
 
 ### How It Works
 
-1. **Initial Connection**: When a client connects, the server immediately sends the current configuration state
-2. **Making Changes**: When a user modifies any setting (toggle, input field, dropdown), the change is emitted to the server via WebSocket
-3. **Broadcasting Updates**: The server updates the configuration and broadcasts the new state to ALL connected clients
+1. **Initial Load**: The client fetches the current configuration via REST
+2. **Making Changes**: When a user modifies any setting, the change is sent to the server via REST
+3. **Broadcasting Updates**: The server broadcasts the new state to ALL connected clients via WebSocket
 4. **Real-time Sync**: All browser windows/tabs instantly reflect the updated configuration without page refresh
 
 ### Configuration Options

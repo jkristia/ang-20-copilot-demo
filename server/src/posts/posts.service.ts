@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
-import { Post, CreatePostDto, UpdatePostDto } from '../../../shared/src/model.interfaces';
+import { Post, CreatePostDto, UpdatePostDto } from '../../../shared/src/post.interface';
 import { randomUUID } from 'crypto';
 import { PersistenceService } from '../persistence/persistence.service';
 
@@ -7,7 +7,7 @@ import { PersistenceService } from '../persistence/persistence.service';
 export class PostsService implements OnModuleInit {
   private posts: Post[] = [];
 
-  constructor(private readonly persistenceService: PersistenceService) {}
+  constructor(private readonly persistenceService: PersistenceService) { }
 
   public onModuleInit(): void {
     this.loadPosts();
@@ -59,7 +59,7 @@ export class PostsService implements OnModuleInit {
       for (let i = 0; i < 10; i++) {
         const date = new Date();
         date.setDate(date.getDate() - (i * 3)); // Space posts 3 days apart
-        
+
         this.posts.push({
           id: randomUUID(),
           date: date.toISOString(),
@@ -71,7 +71,7 @@ export class PostsService implements OnModuleInit {
   }
 
   public findAll(): Post[] {
-    return this.posts.sort((a, b) => 
+    return this.posts.sort((a, b) =>
       new Date(b.date).getTime() - new Date(a.date).getTime()
     );
   }
@@ -101,12 +101,12 @@ export class PostsService implements OnModuleInit {
     if (postIndex === -1) {
       throw new NotFoundException(`Post with ID ${id} not found`);
     }
-    
+
     this.posts[postIndex] = {
       ...this.posts[postIndex],
       ...updatePostDto,
     };
-    
+
     this.savePosts();
     return this.posts[postIndex];
   }

@@ -1,0 +1,218 @@
+openapi: 3.0.0
+paths:
+  /api:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - App
+  /api/config:
+    get:
+      operationId: ConfigController_getConfig
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Config
+    put:
+      operationId: ConfigController_updateConfig
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Config
+  /api/running-state:
+    get:
+      operationId: RunningStateController_getState
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - RunningState
+  /api/running-state/duration:
+    put:
+      operationId: RunningStateController_setDuration
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - RunningState
+  /api/running-state/start:
+    post:
+      operationId: RunningStateController_start
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - RunningState
+  /api/posts:
+    get:
+      operationId: PostsController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Posts
+    post:
+      operationId: PostsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - Posts
+  /api/posts/{id}:
+    get:
+      operationId: PostsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Posts
+    put:
+      operationId: PostsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePostDto'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Posts
+    delete:
+      operationId: PostsController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+        - Posts
+  /api/employees:
+    get:
+      operationId: EmployeesController_findAll
+      parameters:
+        - name: skip
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: take
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Employees
+  /api/employees/details:
+    get:
+      operationId: EmployeesController_findAllDetails
+      parameters:
+        - name: skip
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: take
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Employees
+  /api/employees/{id}:
+    get:
+      operationId: EmployeesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Employees
+  /api/employees/{id}/details:
+    get:
+      operationId: EmployeesController_findDetailByEmployeeId
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Employees
+    patch:
+      operationId: EmployeesController_updateDetail
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Employees
+info:
+  title: Blog Posts Demo API
+  description: REST API for posts, employees, config, and running state
+  version: 1.0.0
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    CreatePostDto:
+      type: object
+      properties: {}
+    UpdatePostDto:
+      type: object
+      properties: {}
