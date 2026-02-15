@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IRunningState } from '../../../shared/src/model.interfaces';
+import { IRunningState, RunningStateEnum } from '../../../shared/src/model.interfaces';
 import { RunningState } from './running-state';
 
 @Injectable()
@@ -20,6 +20,13 @@ export class RunningStateService {
    */
   setUpdateCallback(callback: (state: IRunningState) => void): void {
     this.updateCallback = callback;
+  }
+
+  /**
+   * Check if system is in IDLE state
+   */
+  isIdle(): boolean {
+    return this.runningState.state === RunningStateEnum.IDLE;
   }
 
   getState(): IRunningState {

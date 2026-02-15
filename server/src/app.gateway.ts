@@ -12,7 +12,7 @@ import { Server, Socket } from 'socket.io';
 import { Injectable, forwardRef, Inject } from '@nestjs/common';
 import { ConfigService } from './config/config.service';
 import { RunningStateService } from './config/running-state.service';
-import type { IDemoConfig, IRunningState } from '../../shared/src/model.interfaces';
+import type { IDemoConfig, IRunningState, RunningStateEnum } from '../../shared/src/model.interfaces';
 import {
   ConfigSocketEvents,
   RunningStateSocketEvents,
@@ -101,6 +101,11 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect, OnG
     @MessageBody() updates: Partial<IDemoConfig>,
     @ConnectedSocket() client: Socket,
   ): void {
+    // Block config updates while running
+    if (!this.runningStateService.isIdle()) {
+      console.log('Config update rejected: system is running');
+      return;
+    }
     const updatedConfig = this.configService.updateConfig(updates);
     // Broadcast to all clients
     this.server.emit(ConfigSocketEvents.UPDATED, updatedConfig);

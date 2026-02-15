@@ -8,11 +8,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { DatePipe } from '@angular/common';
 import { ConfigService } from '../../services/config.service';
 import { RunningStateService } from '../../services/running-state.service';
 import { APP_ROUTES } from '../../app.routes.constants';
 import { SelectEnum, SelectEnumDescriptions, DemoConfigValidation } from '../../models';
+import { NetworkSettingsComponent } from '../network-settings/network-settings.component';
+import { DisplaySettingsComponent } from '../display-settings/display-settings.component';
 
 @Component({
   selector: 'app-demo-config',
@@ -26,7 +29,10 @@ import { SelectEnum, SelectEnumDescriptions, DemoConfigValidation } from '../../
     MatSlideToggleModule,
     MatButtonModule,
     MatIconModule,
+    MatExpansionModule,
     DatePipe,
+    NetworkSettingsComponent,
+    DisplaySettingsComponent,
   ],
   templateUrl: './demo-config.component.html',
   styleUrl: './demo-config.component.scss',

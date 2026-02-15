@@ -1,0 +1,68 @@
+<div class="settings-container">
+  <div class="form-field">
+    <mat-slide-toggle
+      [checked]="networkSettings().network_enabled"
+      [disabled]="isDisabled()"
+      (change)="onNetworkEnabledChange($event.checked)"
+      color="primary"
+    >
+      Network Enabled
+    </mat-slide-toggle>
+  </div>
+
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Timeout (seconds)</mat-label>
+    <input
+      matInput
+      type="number"
+      step="1"
+      [min]="validation.TIMEOUT_MIN"
+      [max]="validation.TIMEOUT_MAX"
+      [value]="networkSettings().timeout_seconds"
+      [disabled]="isDisabled()"
+      (change)="onTimeoutChange($event)"
+    />
+    <mat-hint>Range: {{ validation.TIMEOUT_MIN }} to {{ validation.TIMEOUT_MAX }}</mat-hint>
+  </mat-form-field>
+
+  <div class="form-field">
+    <mat-checkbox
+      [checked]="networkSettings().allow_retry"
+      [disabled]="isDisabled()"
+      (change)="onAllowRetryChange($event.checked)"
+      color="primary"
+    >
+      Allow Retry
+    </mat-checkbox>
+  </div>
+
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Retry Count</mat-label>
+    <input
+      matInput
+      type="number"
+      step="1"
+      [min]="validation.RETRY_MIN"
+      [max]="validation.RETRY_MAX"
+      [value]="networkSettings().retry_count"
+      [disabled]="isRetryDisabled()"
+      (change)="onRetryCountChange($event)"
+    />
+    <mat-hint>Range: {{ validation.RETRY_MIN }} to {{ validation.RETRY_MAX }}</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Connection Mode</mat-label>
+    <mat-select
+      [value]="networkSettings().connection_mode"
+      [disabled]="isDisabled()"
+      (selectionChange)="onConnectionModeChange($event.value)"
+    >
+      @for (option of connectionModeOptions; track option) {
+        <mat-option [value]="option">
+          {{ connectionModeDescriptions[option] }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>

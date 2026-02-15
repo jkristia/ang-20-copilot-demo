@@ -38,6 +38,46 @@ export class UpdatePostDto {
 }
 
 // =============================================================================
+// Shared Enums (declared early for use in multiple interfaces)
+// =============================================================================
+
+/**
+ * Enum for network connection mode
+ */
+export enum ConnectionModeEnum {
+  AUTO = 'auto',
+  MANUAL = 'manual',
+  ON_DEMAND = 'on_demand',
+}
+
+/**
+ * Human-readable descriptions for ConnectionModeEnum values
+ */
+export const ConnectionModeDescriptions: Record<ConnectionModeEnum, string> = {
+  [ConnectionModeEnum.AUTO]: 'Automatic',
+  [ConnectionModeEnum.MANUAL]: 'Manual',
+  [ConnectionModeEnum.ON_DEMAND]: 'On Demand',
+};
+
+/**
+ * Enum for display theme
+ */
+export enum ThemeEnum {
+  LIGHT = 'light',
+  DARK = 'dark',
+  SYSTEM = 'system',
+}
+
+/**
+ * Human-readable descriptions for ThemeEnum values
+ */
+export const ThemeDescriptions: Record<ThemeEnum, string> = {
+  [ThemeEnum.LIGHT]: 'Light',
+  [ThemeEnum.DARK]: 'Dark',
+  [ThemeEnum.SYSTEM]: 'System Default',
+};
+
+// =============================================================================
 // DemoConfig interfaces
 // =============================================================================
 
@@ -69,6 +109,8 @@ export interface IDemoConfig {
   string_value: string;
   select_value: SelectEnum;
   last_changed: string;
+  network_settings: INetworkSettings;
+  display_settings: IDisplaySettings;
 }
 
 /**
@@ -86,6 +128,8 @@ export const DemoConfigValidation = {
 
 /**
  * Default configuration values
+ * Note: network_settings and display_settings use inline defaults since their
+ * DEFAULT_* constants are defined later. Values match the respective defaults.
  */
 export const DEFAULT_DEMO_CONFIG: IDemoConfig = {
   enabled: false,
@@ -94,6 +138,19 @@ export const DEFAULT_DEMO_CONFIG: IDemoConfig = {
   string_value: '',
   select_value: SelectEnum.value1,
   last_changed: new Date().toISOString(),
+  network_settings: {
+    network_enabled: true,
+    timeout_seconds: 30,
+    allow_retry: true,
+    retry_count: 3,
+    connection_mode: ConnectionModeEnum.AUTO,
+  },
+  display_settings: {
+    dark_mode: false,
+    font_size: 14,
+    show_animations: true,
+    theme: ThemeEnum.SYSTEM,
+  },
 };
 
 // =============================================================================
@@ -141,4 +198,75 @@ export const DEFAULT_RUNNING_STATE: IRunningState = {
   state: RunningStateEnum.IDLE,
   run_duration: RunningStateValidation.DURATION_DEFAULT,
   elapsed_seconds: 0,
+};
+
+// =============================================================================
+// NetworkSettings interfaces
+// =============================================================================
+
+/**
+ * Network settings interface
+ */
+export interface INetworkSettings {
+  network_enabled: boolean;
+  timeout_seconds: number;
+  allow_retry: boolean;
+  retry_count: number;
+  connection_mode: ConnectionModeEnum;
+}
+
+/**
+ * Validation constants for NetworkSettings
+ */
+export const NetworkSettingsValidation = {
+  TIMEOUT_MIN: 1,
+  TIMEOUT_MAX: 60,
+  TIMEOUT_DEFAULT: 30,
+  RETRY_MIN: 0,
+  RETRY_MAX: 10,
+  RETRY_DEFAULT: 3,
+} as const;
+
+/**
+ * Default network settings values
+ */
+export const DEFAULT_NETWORK_SETTINGS: INetworkSettings = {
+  network_enabled: true,
+  timeout_seconds: NetworkSettingsValidation.TIMEOUT_DEFAULT,
+  allow_retry: true,
+  retry_count: NetworkSettingsValidation.RETRY_DEFAULT,
+  connection_mode: ConnectionModeEnum.AUTO,
+};
+
+// =============================================================================
+// DisplaySettings interfaces
+// =============================================================================
+
+/**
+ * Display settings interface
+ */
+export interface IDisplaySettings {
+  dark_mode: boolean;
+  font_size: number;
+  show_animations: boolean;
+  theme: ThemeEnum;
+}
+
+/**
+ * Validation constants for DisplaySettings
+ */
+export const DisplaySettingsValidation = {
+  FONT_SIZE_MIN: 10,
+  FONT_SIZE_MAX: 24,
+  FONT_SIZE_DEFAULT: 14,
+} as const;
+
+/**
+ * Default display settings values
+ */
+export const DEFAULT_DISPLAY_SETTINGS: IDisplaySettings = {
+  dark_mode: false,
+  font_size: DisplaySettingsValidation.FONT_SIZE_DEFAULT,
+  show_animations: true,
+  theme: ThemeEnum.SYSTEM,
 };

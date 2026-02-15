@@ -8,6 +8,8 @@ export type {
   UpdatePostDto,
   IDemoConfig,
   IRunningState,
+  INetworkSettings,
+  IDisplaySettings,
 } from '../../../../shared/src/model.interfaces';
 
 export {
@@ -15,6 +17,8 @@ export {
   DemoConfigValidation,
   RunningStateEnum,
   RunningStateValidation,
+  ConnectionModeEnum,
+  ThemeEnum,
 } from '../../../../shared/src/model.interfaces';
 
 /**

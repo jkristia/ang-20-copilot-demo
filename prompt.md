@@ -100,3 +100,17 @@ step6:
 	- all edit fields in demo-config.component must be disabled when state is not IDLE
 - keep a single shared websocket for all services on client and all gateways on server
 
+step7
+- missed from step6, any API changes is not allowed while state is RUNNING - add this
+- add another 2 classed,
+	- expose this as a property on the config class.
+	- decide for a meaningful name.
+	- The purpose of this class is just to add a couple of more settings components on the config page.
+	- add at least 4 propeties for each class, bool, number, select, give meaningful names
+- add client component for each
+	- add components in a collapsible container under the config component
+	- both components should be disabled if config enabled is false
+- refactor any duplicated code
+
+
+
