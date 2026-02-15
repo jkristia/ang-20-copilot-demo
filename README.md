@@ -58,6 +58,8 @@ make install       # Install dependencies for both server and client
 make server        # Start the NestJS backend server (auto-generates mock data if missing)
 make client        # Start the Angular frontend client
 make generate-data # Regenerate all mock data files
+make kill          # Kill server (port 3000) and client (port 4200) if running
+make run-all       # Start client (background) and server (foreground)
 ```
 
 ## Swagger / OpenAPI
