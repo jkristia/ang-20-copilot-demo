@@ -1,13 +1,11 @@
-import { Component, inject, signal, OnInit, OnDestroy, computed, ViewChild } from '@angular/core';
+import { Component, inject, signal, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ColDef } from 'ag-grid-community';
 import { Employee } from '@blog/shared';
-import { EmployeeService } from '../../services/employee.service';
-import { WebSocketService } from '../../services/websocket.service';
+import { EmployeesStore } from '../../services/employees.store';
 import { DataGridComponent, DataGridConfig } from '../data-grid/data-grid.component';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-employees-list',
@@ -21,16 +19,13 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
 })
-export class EmployeesListComponent implements OnInit, OnDestroy {
-  private readonly employeeService = inject(EmployeeService);
-  private readonly wsService = inject(WebSocketService);
-  private readonly destroy$ = new Subject<void>();
+export class EmployeesListComponent implements OnInit {
+  private readonly store = inject(EmployeesStore);
 
-  @ViewChild(DataGridComponent) private dataGrid?: DataGridComponent<Employee>;
-
-  public readonly employees = signal<Employee[]>([]);
-  public readonly totalCount = signal<number>(0);
-  public readonly loading = signal<boolean>(false);
+  // Expose store signals to template
+  public readonly employees = this.store.employees;
+  public readonly totalCount = this.store.totalCount;
+  public readonly loading = this.store.loading;
   public readonly selectedEmployee = signal<Employee | undefined>(undefined);
 
   /** Column definitions for the employee grid */
@@ -76,45 +71,13 @@ export class EmployeesListComponent implements OnInit, OnDestroy {
   }));
 
   public ngOnInit(): void {
-    this.loadEmployees();
-    this.subscribeToUpdates();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    // Load data if not already initialized
+    if (!this.store.initialized()) {
+      this.store.load();
+    }
   }
 
   public onRowSelected(employee: Employee | undefined): void {
     this.selectedEmployee.set(employee);
-  }
-
-  private loadEmployees(): void {
-    this.loading.set(true);
-    this.employeeService.getEmployees({ take: 1000 }).subscribe({
-      next: (response) => {
-        this.employees.set(response.data);
-        this.totalCount.set(response.total);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('Failed to load employees', err);
-        this.loading.set(false);
-      },
-    });
-  }
-
-  /** Subscribe to WebSocket updates from other clients */
-  private subscribeToUpdates(): void {
-    this.wsService.onEmployeeUpdated()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((updatedEmployee) => {
-        // Update the grid row when employee name/email changes from details edit
-        this.dataGrid?.updateRowData(updatedEmployee.id, updatedEmployee);
-        // Also update the signal data
-        this.employees.update(employees => 
-          employees.map(e => e.id === updatedEmployee.id ? updatedEmployee : e)
-        );
-      });
   }
 }

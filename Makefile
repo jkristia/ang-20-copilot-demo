@@ -43,5 +43,6 @@ generate-data: ## Regenerate all mock data (forces regeneration)
 	@$(MAKE) ensure-data
 
 kill: ## Kill server (port 3000) and client (port 4200) if running
-	@-lsof -ti:3000 | xargs kill -9 2>/dev/null && echo "Killed server on port 3000" || true
-	@-lsof -ti:4200 | xargs kill -9 2>/dev/null && echo "Killed client on port 4200" || true
+	@-lsof -ti:3000 | xargs -r kill -9 2>/dev/null && echo "Killed server on port 3000" || true
+	@-lsof -ti:4200 | xargs -r kill -9 2>/dev/null && echo "Killed client on port 4200" || true
+	@-pkill -f "ng serve" 2>/dev/null && echo "Killed ng serve process" || true
