@@ -1,5 +1,5 @@
-import { Injectable, inject, DestroyRef, signal } from '@angular/core';
-import { IRunningState, DEFAULT_RUNNING_STATE } from '../models';
+import { Injectable, inject, DestroyRef, signal, computed } from '@angular/core';
+import { IRunningState, DEFAULT_RUNNING_STATE, RunningStateEnum } from '../models';
 import { WebSocketService } from './websocket.service';
 
 @Injectable({
@@ -10,6 +10,9 @@ export class RunningStateService {
   private destroyRef = inject(DestroyRef);
 
   state = signal<IRunningState>(DEFAULT_RUNNING_STATE);
+  
+  /** Whether the system is in IDLE state (not running) */
+  isIdle = computed(() => this.state().state === RunningStateEnum.IDLE);
 
   constructor() {
     const currentSub = this.websocketService.onRunningStateCurrent().subscribe((state) => {

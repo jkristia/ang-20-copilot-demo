@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
 import { ConfigService } from '../../services/config.service';
 import { RunningStateService } from '../../services/running-state.service';
 import { APP_ROUTES } from '../../app.routes.constants';
-import { SelectEnum, SelectEnumDescriptions, DemoConfigValidation, RunningStateEnum } from '../../models';
+import { SelectEnum, SelectEnumDescriptions, DemoConfigValidation } from '../../models';
 
 @Component({
   selector: 'app-demo-config',
@@ -37,10 +37,9 @@ export class DemoConfigComponent implements OnInit {
   private router = inject(Router);
 
   config = this.configService.config;
-  runningState = this.runningStateService.state;
   isEnabled = computed(() => this.config().enabled);
   lastChanged = computed(() => this.config().last_changed);
-  isIdle = computed(() => this.runningState().state === RunningStateEnum.IDLE);
+  isIdle = this.runningStateService.isIdle;
 
   selectOptions = Object.values(SelectEnum);
   selectDescriptions = SelectEnumDescriptions;

@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RunningStateService } from '../../services/running-state.service';
 import {
-  RunningStateEnum,
   RunningStateDescriptions,
   RunningStateValidation,
 } from '../../models';
@@ -28,7 +27,7 @@ export class RunningStateComponent implements OnInit {
   private runningStateService = inject(RunningStateService);
 
   state = this.runningStateService.state;
-  isIdle = computed(() => this.state().state === RunningStateEnum.IDLE);
+  isIdle = this.runningStateService.isIdle;
   stateDescription = computed(() => RunningStateDescriptions[this.state().state]);
   elapsedSeconds = computed(() => this.state().elapsed_seconds);
   runDuration = computed(() => this.state().run_duration);
