@@ -14,10 +14,12 @@
 
 ### Employees
 
-| Method | Endpoint              | Description                              |
-|--------|-----------------------|------------------------------------------|
-| GET    | /api/employees        | Get employees (supports skip/take query) |
-| GET    | /api/employees/:id    | Get a single employee                    |
+| Method | Endpoint                  | Description                                  |
+|--------|---------------------------|----------------------------------------------|
+| GET    | /api/employees            | Get employees (supports skip/take query)     |
+| GET    | /api/employees/:id        | Get a single employee                        |
+| GET    | /api/employees/details    | Get employee details (supports skip/take)    |
+| GET    | /api/employees/:id/details| Get details for a specific employee          |
 
 The employees endpoint returns a paginated response:
 ```json
@@ -88,7 +90,10 @@ The Demo Config page (`/config`) demonstrates real-time configuration synchroniz
 
 ## Employees Table
 
-The Employees page (`/employees`) displays a data grid with 1000 employee records using AG Grid Community.
+The Employees page (`/employees`) displays a data grid with 1000 employee records using AG Grid Community. The page has two tabs:
+
+- **Employees** (`/employees`): Main employee list with core fields
+- **Details** (`/employees/details`): Extended employee information
 
 ### Features
 

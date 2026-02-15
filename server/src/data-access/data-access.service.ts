@@ -34,10 +34,11 @@ export class DataAccessService {
       skip_empty_lines: true,
       cast: (value, context) => {
         // Auto-cast numeric columns
-        if (context.column === 'id' || 
-            context.column === 'salary' || 
-            context.column === 'performance_rating' ||
-            context.column === 'manager_id') {
+        const numericColumns = [
+          'id', 'salary', 'performance_rating', 'manager_id',
+          'employee_id', 'dependents'
+        ];
+        if (numericColumns.includes(context.column as string)) {
           if (value === '' || value === null) {
             return null;
           }

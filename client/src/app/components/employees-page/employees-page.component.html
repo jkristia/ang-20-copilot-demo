@@ -1,0 +1,23 @@
+<div class="employees-page-container">
+  <button mat-button color="primary" class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+    Back to Posts
+  </button>
+
+  <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="tabs-nav">
+    @for (tab of tabs; track tab.route) {
+      <a mat-tab-link
+         [routerLink]="tab.route"
+         routerLinkActive
+         #rla="routerLinkActive"
+         [active]="rla.isActive"
+         [routerLinkActiveOptions]="{ exact: tab.exact }">
+        {{ tab.label }}
+      </a>
+    }
+  </nav>
+
+  <mat-tab-nav-panel #tabPanel class="content-container">
+    <router-outlet />
+  </mat-tab-nav-panel>
+</div>

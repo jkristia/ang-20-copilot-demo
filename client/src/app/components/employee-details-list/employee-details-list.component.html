@@ -1,7 +1,7 @@
-<div class="employees-list-container">
+<div class="details-list-container">
   <div class="header">
-    <span class="title">Employees</span>
-    <span class="subtitle">Total: {{ totalCount() }} employees</span>
+    <span class="title">Employee Details</span>
+    <span class="subtitle">Total: {{ totalCount() }} records</span>
   </div>
 
   @if (loading()) {
@@ -11,11 +11,10 @@
   } @else {
     <div class="grid-container">
       <app-data-grid
-        [rowData]="employees()"
+        [rowData]="details()"
         [config]="gridConfig()"
         [totalRows]="totalCount()"
         [loading]="loading()"
-        (rowSelected)="onRowSelected($event)"
       />
     </div>
   }

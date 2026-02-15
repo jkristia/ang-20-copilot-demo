@@ -3,41 +3,41 @@
   height: 100%;
 }
 
-.employees-list-container {
+.details-list-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 0;
+  padding: 0;
 }
 
 .header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 16px;
-  padding: 8px 0;
-  flex-shrink: 0;
-}
+  padding: 16px 0;
 
-.title {
-  font-size: 1.5rem;
-  font-weight: 500;
-}
+  .title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
+  }
 
-.subtitle {
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 0.875rem;
+  .subtitle {
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
 }
 
 .loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1;
+  height: 200px;
 }
 
 .grid-container {
   flex: 1;
-  width: 100%;
   min-height: 400px;
   height: 100%;
+  width: 100%;
 }

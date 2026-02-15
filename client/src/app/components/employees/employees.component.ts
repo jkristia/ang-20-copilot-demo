@@ -1,32 +1,25 @@
 import { Component, inject, signal, OnInit, computed } from '@angular/core';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ColDef } from 'ag-grid-community';
 import { Employee } from '@blog/shared';
-import { APP_ROUTES } from '../../app.routes.constants';
 import { EmployeeService } from '../../services/employee.service';
 import { DataGridComponent, DataGridConfig } from '../data-grid/data-grid.component';
 
 @Component({
-  selector: 'app-employees',
+  selector: 'app-employees-list',
   standalone: true,
   imports: [
     CommonModule,
     MatCardModule,
-    MatButtonModule,
-    MatIconModule,
     MatProgressSpinnerModule,
     DataGridComponent,
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
 })
-export class EmployeesComponent implements OnInit {
-  private readonly router = inject(Router);
+export class EmployeesListComponent implements OnInit {
   private readonly employeeService = inject(EmployeeService);
 
   public readonly employees = signal<Employee[]>([]);
@@ -77,10 +70,6 @@ export class EmployeesComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadEmployees();
-  }
-
-  public goBack(): void {
-    this.router.navigate([APP_ROUTES.POSTS]);
   }
 
   public onRowSelected(employee: Employee | undefined): void {

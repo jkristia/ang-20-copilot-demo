@@ -127,5 +127,12 @@ goal is to create an angular 20 project simulating a block post site, including 
 	- the page can be access from the posts page, add a 'table icon' button next to the settings button
 	- keep a 'Back to posts' button like the settings page
 
+## step10
+- add employee_detail data grid.
+- this should be shown on a tab on employess view, and should be accessible by url routing
+	- I want 2 tabs | Employees | Details |
+	- http://localhost:4200/#/employees should show the current employees table
+	- http://localhost:4200/#/employees/details should show the details table
+	
 
 

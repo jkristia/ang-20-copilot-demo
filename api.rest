@@ -18,6 +18,22 @@ GET {{baseUrl}}/employees?skip=10&take=10
 GET {{baseUrl}}/employees/1
 
 ### ========================================
+### Employee Details API
+### ========================================
+
+### Get all employee details (default: 1000 records)
+GET {{baseUrl}}/employees/details
+
+### Get employee details with pagination
+GET {{baseUrl}}/employees/details?skip=0&take=10
+
+### Get employee details - page 2
+GET {{baseUrl}}/employees/details?skip=10&take=10
+
+### Get details for a specific employee
+GET {{baseUrl}}/employees/1/details
+
+### ========================================
 ### Posts API
 ### ========================================
 

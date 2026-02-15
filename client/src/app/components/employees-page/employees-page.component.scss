@@ -1,0 +1,39 @@
+.employees-page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 16px;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
+}
+
+.tabs-nav {
+  margin-top: 48px;
+  margin-bottom: 16px;
+  width: fit-content;
+
+  ::ng-deep .mat-mdc-tab-link {
+    min-width: 120px;
+    width: 120px;
+  }
+}
+
+.content-container {
+  flex: 1;
+  display: block;
+  min-height: 0;
+  overflow: hidden;
+  height: calc(100vh - 150px);
+
+  ::ng-deep router-outlet + * {
+    display: block;
+    height: 100%;
+  }
+}

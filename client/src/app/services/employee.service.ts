@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Employee, PaginatedResponse, PaginatedQuery } from '@blog/shared';
+import { Employee, EmployeeDetail, PaginatedResponse, PaginatedQuery } from '@blog/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +25,22 @@ export class EmployeeService {
 
   public getEmployee(id: number): Observable<Employee> {
     return this.http.get<Employee>(`${this.apiUrl}/${id}`);
+  }
+
+  public getEmployeeDetails(query: PaginatedQuery = {}): Observable<PaginatedResponse<EmployeeDetail>> {
+    let params = new HttpParams();
+    
+    if (query.skip !== undefined) {
+      params = params.set('skip', query.skip.toString());
+    }
+    if (query.take !== undefined) {
+      params = params.set('take', query.take.toString());
+    }
+
+    return this.http.get<PaginatedResponse<EmployeeDetail>>(`${this.apiUrl}/details`, { params });
+  }
+
+  public getEmployeeDetail(employeeId: number): Observable<EmployeeDetail> {
+    return this.http.get<EmployeeDetail>(`${this.apiUrl}/${employeeId}/details`);
   }
 }
