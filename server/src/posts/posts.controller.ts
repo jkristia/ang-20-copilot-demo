@@ -10,7 +10,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { PostsGateway } from './posts.gateway';
+import { AppGateway } from '../app.gateway';
 import type { Post as BlogPost } from '../../../shared/src/model.interfaces';
 import { CreatePostDto, UpdatePostDto } from '../../../shared/src/model.interfaces';
 
@@ -18,7 +18,7 @@ import { CreatePostDto, UpdatePostDto } from '../../../shared/src/model.interfac
 export class PostsController {
   constructor(
     private readonly postsService: PostsService,
-    private readonly postsGateway: PostsGateway,
+    private readonly appGateway: AppGateway,
   ) {}
 
   @Get()
@@ -35,7 +35,7 @@ export class PostsController {
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createPostDto: CreatePostDto): BlogPost {
     const post = this.postsService.create(createPostDto);
-    this.postsGateway.emitPostsUpdate();
+    this.appGateway.emitPostsUpdate();
     return post;
   }
 
@@ -45,7 +45,7 @@ export class PostsController {
     @Body() updatePostDto: UpdatePostDto,
   ): BlogPost {
     const post = this.postsService.update(id, updatePostDto);
-    this.postsGateway.emitPostsUpdate();
+    this.appGateway.emitPostsUpdate();
     return post;
   }
 
@@ -53,6 +53,6 @@ export class PostsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id') id: string): void {
     this.postsService.delete(id);
-    this.postsGateway.emitPostsUpdate();
+    this.appGateway.emitPostsUpdate();
   }
 }

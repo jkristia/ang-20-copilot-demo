@@ -83,3 +83,20 @@ step5:
 	- expose this as a read only field in the client component
 	- of course any change is reflected on all clients
 
+step6:
+- add a RunningState class and necessary interface.
+	- this state should be available system wide
+		- should have an num IDLE and RUNNING
+		- should have a run_duration int value, min / max - 1 / 30 seconds, default is 5
+- change to client
+	- the demo-config view should have a top band whic will container the running state, later additional components will be added.
+	- the current component should become a component on a page
+	- the top bar will contain the running state component
+		- show the state as reead only, 'Idle' or 'Runninng'
+		- show a 'Run Duration' edit which sets the run_duration value (int value)
+		- add a 'Run' button, when clicked the state on the backend should change to 'running' for the duration of run_duration, then back to idle
+		- the UI must be updated with state and elapsed time in seconds
+		- edit and run button must be disabled when state is not IDLE
+	- all edit fields in demo-config.component must be disabled when state is not IDLE
+- keep a single shared websocket for all services on client and all gateways on server
+

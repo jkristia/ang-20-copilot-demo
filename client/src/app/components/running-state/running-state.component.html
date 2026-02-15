@@ -1,0 +1,35 @@
+<div class="running-state-container">
+  <div class="state-display">
+    <span class="state-label">State:</span>
+    <span class="state-value" [class.running]="!isIdle()">
+      {{ stateDescription() }}
+    </span>
+    @if (!isIdle()) {
+      <span class="elapsed-time">({{ elapsedSeconds() }}s / {{ runDuration() }}s)</span>
+    }
+  </div>
+
+  <mat-form-field appearance="outline" class="duration-field">
+    <mat-label>Run Duration (seconds)</mat-label>
+    <input
+      matInput
+      type="number"
+      step="1"
+      [min]="validation.DURATION_MIN"
+      [max]="validation.DURATION_MAX"
+      [value]="runDuration()"
+      [disabled]="!isIdle()"
+      (change)="onDurationChange($event)"
+    />
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="!isIdle()"
+    (click)="onRun()"
+  >
+    <mat-icon>play_arrow</mat-icon>
+    Run
+  </button>
+</div>

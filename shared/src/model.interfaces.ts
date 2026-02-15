@@ -95,3 +95,50 @@ export const DEFAULT_DEMO_CONFIG: IDemoConfig = {
   select_value: SelectEnum.value1,
   last_changed: new Date().toISOString(),
 };
+
+// =============================================================================
+// RunningState interfaces
+// =============================================================================
+
+/**
+ * Enum for running state
+ */
+export enum RunningStateEnum {
+  IDLE = 'IDLE',
+  RUNNING = 'RUNNING',
+}
+
+/**
+ * Human-readable descriptions for RunningStateEnum values
+ */
+export const RunningStateDescriptions: Record<RunningStateEnum, string> = {
+  [RunningStateEnum.IDLE]: 'Idle',
+  [RunningStateEnum.RUNNING]: 'Running',
+};
+
+/**
+ * Running state interface
+ */
+export interface IRunningState {
+  state: RunningStateEnum;
+  run_duration: number;
+  elapsed_seconds: number;
+}
+
+/**
+ * Validation constants for RunningState
+ */
+export const RunningStateValidation = {
+  DURATION_MIN: 1,
+  DURATION_MAX: 30,
+  DURATION_DEFAULT: 5,
+} as const;
+
+/**
+ * Default running state values
+ */
+export const DEFAULT_RUNNING_STATE: IRunningState = {
+  state: RunningStateEnum.IDLE,
+  run_duration: RunningStateValidation.DURATION_DEFAULT,
+  elapsed_seconds: 0,
+};

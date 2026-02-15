@@ -8,4 +8,6 @@ export * from './interfaces';
 export {
   SelectEnumDescriptions,
   DEFAULT_DEMO_CONFIG,
+  RunningStateDescriptions,
+  DEFAULT_RUNNING_STATE,
 } from '../../../../shared/src/model.interfaces';

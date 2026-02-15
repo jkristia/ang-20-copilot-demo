@@ -2,7 +2,7 @@
  * WebSocket event names for type-safe socket communication
  */
 
-import type { IDemoConfig } from './model.interfaces';
+import type { IDemoConfig, IRunningState } from './model.interfaces';
 
 /** Config-related socket events */
 export const ConfigSocketEvents = {
@@ -22,11 +22,28 @@ export const PostsSocketEvents = {
   UPDATED: 'posts:updated',
 } as const;
 
+/** RunningState-related socket events */
+export const RunningStateSocketEvents = {
+  /** Client requests current state */
+  GET: 'running-state:get',
+  /** Client updates run_duration */
+  SET_DURATION: 'running-state:set-duration',
+  /** Client requests to start running */
+  START: 'running-state:start',
+  /** Server sends current state (response to GET or on connect) */
+  CURRENT: 'running-state:current',
+  /** Server broadcasts state update to all clients */
+  UPDATED: 'running-state:updated',
+} as const;
+
 /** Type for ConfigSocketEvents values */
 export type ConfigSocketEvent = typeof ConfigSocketEvents[keyof typeof ConfigSocketEvents];
 
 /** Type for PostsSocketEvents values */
 export type PostsSocketEvent = typeof PostsSocketEvents[keyof typeof PostsSocketEvents];
+
+/** Type for RunningStateSocketEvents values */
+export type RunningStateSocketEvent = typeof RunningStateSocketEvents[keyof typeof RunningStateSocketEvents];
 
 // =============================================================================
 // Socket.IO typed interfaces for Server<T> and Socket<T> generics
@@ -52,4 +69,17 @@ export interface PostsServerToClientEvents {
 /** Posts: Events emitted from client to server */
 export interface PostsClientToServerEvents {
   // No client-to-server events for posts currently
+}
+
+/** RunningState: Events emitted from server to client */
+export interface RunningStateServerToClientEvents {
+  [RunningStateSocketEvents.CURRENT]: (state: IRunningState) => void;
+  [RunningStateSocketEvents.UPDATED]: (state: IRunningState) => void;
+}
+
+/** RunningState: Events emitted from client to server */
+export interface RunningStateClientToServerEvents {
+  [RunningStateSocketEvents.GET]: () => void;
+  [RunningStateSocketEvents.SET_DURATION]: (duration: number) => void;
+  [RunningStateSocketEvents.START]: () => void;
 }

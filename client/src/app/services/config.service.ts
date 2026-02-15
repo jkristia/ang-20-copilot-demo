@@ -1,45 +1,36 @@
 import { Injectable, inject, DestroyRef, signal } from '@angular/core';
-import { io, Socket } from 'socket.io-client';
-import {
-  IDemoConfig,
-  DEFAULT_DEMO_CONFIG,
-  ConfigSocketEvents,
-  ConfigServerToClientEvents,
-  ConfigClientToServerEvents,
-} from '../models';
+import { IDemoConfig, DEFAULT_DEMO_CONFIG } from '../models';
+import { WebSocketService } from './websocket.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  private socket: Socket<ConfigServerToClientEvents, ConfigClientToServerEvents>;
+  private websocketService = inject(WebSocketService);
   private destroyRef = inject(DestroyRef);
 
   config = signal<IDemoConfig>(DEFAULT_DEMO_CONFIG);
 
   constructor() {
-    this.socket = io('http://localhost:3000', {
-      transports: ['websocket'],
-    });
-
-    this.socket.on(ConfigSocketEvents.CURRENT, (config) => {
+    const currentSub = this.websocketService.onConfigCurrent().subscribe((config) => {
       this.config.set(config);
     });
 
-    this.socket.on(ConfigSocketEvents.UPDATED, (config) => {
+    const updatedSub = this.websocketService.onConfigUpdated().subscribe((config) => {
       this.config.set(config);
     });
 
     this.destroyRef.onDestroy(() => {
-      this.socket.disconnect();
+      currentSub.unsubscribe();
+      updatedSub.unsubscribe();
     });
   }
 
   getConfig(): void {
-    this.socket.emit(ConfigSocketEvents.GET);
+    this.websocketService.getConfig();
   }
 
   updateConfig(updates: Partial<IDemoConfig>): void {
-    this.socket.emit(ConfigSocketEvents.UPDATE, updates);
+    this.websocketService.updateConfig(updates);
   }
 }

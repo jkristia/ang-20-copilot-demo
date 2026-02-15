@@ -10,8 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DatePipe } from '@angular/common';
 import { ConfigService } from '../../services/config.service';
+import { RunningStateService } from '../../services/running-state.service';
 import { APP_ROUTES } from '../../app.routes.constants';
-import { SelectEnum, SelectEnumDescriptions, DemoConfigValidation } from '../../models';
+import { SelectEnum, SelectEnumDescriptions, DemoConfigValidation, RunningStateEnum } from '../../models';
 
 @Component({
   selector: 'app-demo-config',
@@ -32,11 +33,14 @@ import { SelectEnum, SelectEnumDescriptions, DemoConfigValidation } from '../../
 })
 export class DemoConfigComponent implements OnInit {
   private configService = inject(ConfigService);
+  private runningStateService = inject(RunningStateService);
   private router = inject(Router);
 
   config = this.configService.config;
+  runningState = this.runningStateService.state;
   isEnabled = computed(() => this.config().enabled);
   lastChanged = computed(() => this.config().last_changed);
+  isIdle = computed(() => this.runningState().state === RunningStateEnum.IDLE);
 
   selectOptions = Object.values(SelectEnum);
   selectDescriptions = SelectEnumDescriptions;

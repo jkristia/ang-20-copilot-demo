@@ -11,6 +11,7 @@
       <div class="form-field">
         <mat-slide-toggle
           [checked]="config().enabled"
+          [disabled]="!isIdle()"
           (change)="onEnabledChange($event.checked)"
           color="primary"
         >
@@ -27,6 +28,7 @@
           [min]="validation.FLOAT_MIN"
           [max]="validation.FLOAT_MAX"
           [value]="config().float_value"
+          [disabled]="!isIdle()"
           (change)="onFloatValueChange($event)"
         />
         <mat-hint>Range: {{ validation.FLOAT_MIN }} to {{ validation.FLOAT_MAX }}</mat-hint>
@@ -41,6 +43,7 @@
           [min]="validation.INT_MIN"
           [max]="validation.INT_MAX"
           [value]="config().int_value"
+          [disabled]="!isIdle()"
           (change)="onIntValueChange($event)"
         />
         <mat-hint>Range: {{ validation.INT_MIN }} to {{ validation.INT_MAX }}</mat-hint>
@@ -53,7 +56,7 @@
           type="text"
           [attr.maxlength]="validation.STRING_MAX_LENGTH"
           [value]="config().string_value"
-          [disabled]="!isEnabled()"
+          [disabled]="!isEnabled() || !isIdle()"
           (input)="onStringValueChange($any($event.target).value)"
         />
         <mat-hint>Max {{ validation.STRING_MAX_LENGTH }} characters</mat-hint>
@@ -63,7 +66,7 @@
         <mat-label>Select Value</mat-label>
         <mat-select
           [value]="config().select_value"
-          [disabled]="!isEnabled()"
+          [disabled]="!isEnabled() || !isIdle()"
           (selectionChange)="onSelectValueChange($event.value)"
         >
           @for (option of selectOptions; track option) {

@@ -7,9 +7,15 @@ export type {
   CreatePostDto,
   UpdatePostDto,
   IDemoConfig,
+  IRunningState,
 } from '../../../../shared/src/model.interfaces';
 
-export { SelectEnum, DemoConfigValidation } from '../../../../shared/src/model.interfaces';
+export {
+  SelectEnum,
+  DemoConfigValidation,
+  RunningStateEnum,
+  RunningStateValidation,
+} from '../../../../shared/src/model.interfaces';
 
 /**
  * Re-export socket event constants and interfaces from shared source
@@ -17,6 +23,7 @@ export { SelectEnum, DemoConfigValidation } from '../../../../shared/src/model.i
 export {
   ConfigSocketEvents,
   PostsSocketEvents,
+  RunningStateSocketEvents,
 } from '../../../../shared/src/socket-events';
 
 export type {
@@ -24,4 +31,6 @@ export type {
   ConfigClientToServerEvents,
   PostsServerToClientEvents,
   PostsClientToServerEvents,
+  RunningStateServerToClientEvents,
+  RunningStateClientToServerEvents,
 } from '../../../../shared/src/socket-events';
