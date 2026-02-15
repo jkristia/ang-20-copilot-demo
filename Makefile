@@ -22,12 +22,14 @@ install-client:
 # Mock data files - add new entries here as needed
 DATA_DIR := server/data
 MOCK_EMPLOYEES := $(DATA_DIR)/employees.csv
+MOCK_EMPLOYEE_DETAILS := $(DATA_DIR)/employee_details.csv
 
 # Ensure mock data exists (runs before server)
-ensure-data: $(MOCK_EMPLOYEES)
+ensure-data: $(MOCK_EMPLOYEES) $(MOCK_EMPLOYEE_DETAILS)
 
-$(MOCK_EMPLOYEES):
-	@echo "Generating employees.csv..."
+# Both files are generated together by the same script
+$(MOCK_EMPLOYEES) $(MOCK_EMPLOYEE_DETAILS):
+	@echo "Generating employee data..."
 	@python3 scripts/generate_employees.py
 
 server: ensure-data ## Start the NestJS backend server

@@ -141,6 +141,43 @@ Mock data files are auto-generated when running `make server` if they don't exis
 make generate-data
 ```
 
-| File              | Script                           | Description              |
-|-------------------|----------------------------------|--------------------------|
-| employees.csv     | scripts/generate_employees.py    | 1000 employee records    |
+| File                  | Script                           | Description                        |
+|-----------------------|----------------------------------|------------------------------------|
+| employees.csv         | scripts/generate_employees.py    | 1000 employee records (master)     |
+| employee_details.csv  | scripts/generate_employees.py    | 1000 detail records (for detail view) |
+
+### Employee Detail Fields (Master-Detail View)
+
+| Field                        | Type    | Description                          |
+|------------------------------|---------|--------------------------------------|
+| employee_id                  | number  | Foreign key to employees table       |
+| date_of_birth                | string  | Date of birth (YYYY-MM-DD)           |
+| gender                       | string  | Male/Female/Non-binary/Prefer not to say |
+| marital_status               | string  | Single/Married/Divorced/etc.         |
+| dependents                   | number  | Number of dependents                 |
+| nationality                  | string  | Country of citizenship               |
+| ssn                          | string  | Social Security Number (masked)      |
+| street_address               | string  | Street address                       |
+| city                         | string  | City name                            |
+| state                        | string  | State code                           |
+| postal_code                  | string  | ZIP/Postal code                      |
+| country                      | string  | Country                              |
+| home_phone                   | string  | Home phone number                    |
+| mobile_phone                 | string  | Mobile phone number                  |
+| work_phone                   | string  | Work phone number                    |
+| work_extension               | string  | Work phone extension                 |
+| emergency_contact_name       | string  | Emergency contact full name          |
+| emergency_contact_phone      | string  | Emergency contact phone              |
+| emergency_contact_relationship | string | Relationship to emergency contact    |
+| bank_name                    | string  | Bank name for direct deposit         |
+| bank_account                 | string  | Bank account number (masked)         |
+| routing_number               | string  | Bank routing number (masked)         |
+| tax_id                       | string  | Tax ID (masked)                      |
+| drivers_license              | string  | Driver's license number              |
+| drivers_license_state        | string  | Driver's license state               |
+| blood_type                   | string  | Blood type                           |
+| medical_conditions           | string  | Medical conditions                   |
+| allergies                    | string  | Known allergies                      |
+| dietary_restrictions         | string  | Dietary restrictions                 |
+| shirt_size                   | string  | Shirt size (XS-XXL)                  |
+| notes                        | string  | Additional notes                     |
