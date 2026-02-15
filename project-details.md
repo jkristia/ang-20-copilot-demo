@@ -60,7 +60,21 @@ The Demo Config page (`/config`) demonstrates real-time configuration synchroniz
 ```
 ├── client/          # Angular frontend
 ├── server/          # NestJS backend
+│   └── data/        # Generated mock data (git-ignored)
 ├── shared/          # Shared TypeScript interfaces (@blog/shared)
+├── scripts/         # Python scripts for mock data generation
 ├── Makefile         # Build and run commands
 └── README.md
 ```
+
+## Mock Data Generation
+
+Mock data files are auto-generated when running `make server` if they don't exist. To force regeneration:
+
+```bash
+make generate-data
+```
+
+| File              | Script                           | Description              |
+|-------------------|----------------------------------|--------------------------|
+| employees.csv     | scripts/generate_employees.py    | 1000 employee records    |

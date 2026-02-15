@@ -22,6 +22,7 @@ A simple blog post application with an Angular frontend and NestJS backend, feat
 
 - Node.js (v20.19+ or v22.12+)
 - npm
+- Python 3.9+ (for mock data generation)
 
 ## Getting Started
 
@@ -48,10 +49,11 @@ make client
 ## Available Commands
 
 ```bash
-make          # Show available commands
-make install  # Install dependencies for both server and client
-make server   # Start the NestJS backend server
-make client   # Start the Angular frontend client
+make               # Show available commands
+make install       # Install dependencies for both server and client
+make server        # Start the NestJS backend server (auto-generates mock data if missing)
+make client        # Start the Angular frontend client
+make generate-data # Regenerate all mock data files
 ```
 
 See [project-details.md](project-details.md) for API endpoints, WebSocket events, and detailed documentation.
