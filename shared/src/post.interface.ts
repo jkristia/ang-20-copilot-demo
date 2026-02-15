@@ -12,7 +12,7 @@ export interface Post {
  * DTO for creating a new post
  */
 export class CreatePostDto {
-  date!: string;
+  date?: string;
   topic!: string;
   message!: string;
 }

@@ -16,14 +16,30 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoConfigDto'
       tags:
         - Config
     put:
       operationId: ConfigController_updateConfig
       parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDemoConfigDto'
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoConfigDto'
+        '409':
+          description: 'Config update rejected: system is running'
       tags:
         - Config
   /api/running-state:
@@ -33,15 +49,29 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunningStateDto'
       tags:
         - RunningState
   /api/running-state/duration:
     put:
       operationId: RunningStateController_setDuration
       parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetRunDurationDto'
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunningStateDto'
       tags:
         - RunningState
   /api/running-state/start:
@@ -51,6 +81,10 @@ paths:
       responses:
         '201':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunningStateDto'
       tags:
         - RunningState
   /api/posts:
@@ -60,6 +94,12 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostDto'
       tags:
         - Posts
     post:
@@ -70,10 +110,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePostDto'
+              $ref: '#/components/schemas/CreatePostBodyDto'
       responses:
         '201':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDto'
       tags:
         - Posts
   /api/posts/{id}:
@@ -88,6 +132,10 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDto'
       tags:
         - Posts
     put:
@@ -103,10 +151,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdatePostDto'
+              $ref: '#/components/schemas/UpdatePostBodyDto'
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDto'
       tags:
         - Posts
     delete:
@@ -127,18 +179,24 @@ paths:
       operationId: EmployeesController_findAll
       parameters:
         - name: skip
-          required: true
+          required: false
           in: query
           schema:
+            example: 0
             type: number
         - name: take
-          required: true
+          required: false
           in: query
           schema:
+            example: 100
             type: number
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEmployeesDto'
       tags:
         - Employees
   /api/employees/details:
@@ -146,18 +204,24 @@ paths:
       operationId: EmployeesController_findAllDetails
       parameters:
         - name: skip
-          required: true
+          required: false
           in: query
           schema:
+            example: 0
             type: number
         - name: take
-          required: true
+          required: false
           in: query
           schema:
+            example: 100
             type: number
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEmployeeDetailsDto'
       tags:
         - Employees
   /api/employees/{id}:
@@ -168,10 +232,15 @@ paths:
           required: true
           in: path
           schema:
+            example: 1
             type: number
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDto'
       tags:
         - Employees
   /api/employees/{id}/details:
@@ -182,10 +251,15 @@ paths:
           required: true
           in: path
           schema:
+            example: 1
             type: number
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDetailDto'
       tags:
         - Employees
     patch:
@@ -195,10 +269,25 @@ paths:
           required: true
           in: path
           schema:
+            example: 1
             type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmployeeDetailDto'
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDetailDto'
+        '400':
+          description: First name or last name cannot be empty
+        '404':
+          description: Employee detail not found
       tags:
         - Employees
 info:
@@ -210,9 +299,492 @@ tags: []
 servers: []
 components:
   schemas:
-    CreatePostDto:
+    NetworkSettingsDto:
       type: object
-      properties: {}
-    UpdatePostDto:
+      properties:
+        network_enabled:
+          type: boolean
+          example: true
+        timeout_seconds:
+          type: number
+          example: 30
+        allow_retry:
+          type: boolean
+          example: true
+        retry_count:
+          type: number
+          example: 3
+        connection_mode:
+          type: string
+          enum:
+            - auto
+            - manual
+            - on_demand
+          example: auto
+      required:
+        - network_enabled
+        - timeout_seconds
+        - allow_retry
+        - retry_count
+        - connection_mode
+    DisplaySettingsDto:
       type: object
-      properties: {}
+      properties:
+        dark_mode:
+          type: boolean
+          example: false
+        font_size:
+          type: number
+          example: 14
+        show_animations:
+          type: boolean
+          example: true
+        theme:
+          type: string
+          enum:
+            - light
+            - dark
+            - system
+          example: system
+      required:
+        - dark_mode
+        - font_size
+        - show_animations
+        - theme
+    DemoConfigDto:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          example: false
+        float_value:
+          type: number
+          example: 1.01
+        int_value:
+          type: number
+          example: 10
+        string_value:
+          type: string
+          example: ''
+        select_value:
+          type: string
+          enum:
+            - value_1
+            - value_2
+            - value_3
+          example: value_1
+        last_changed:
+          type: string
+          example: '2026-02-15T12:34:56.000Z'
+        network_settings:
+          $ref: '#/components/schemas/NetworkSettingsDto'
+        display_settings:
+          $ref: '#/components/schemas/DisplaySettingsDto'
+      required:
+        - enabled
+        - float_value
+        - int_value
+        - string_value
+        - select_value
+        - last_changed
+        - network_settings
+        - display_settings
+    UpdateDemoConfigDto:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          example: true
+        float_value:
+          type: number
+          example: 1.5
+        int_value:
+          type: number
+          example: 12
+        string_value:
+          type: string
+          example: Updated
+        select_value:
+          type: string
+          enum:
+            - value_1
+            - value_2
+            - value_3
+          example: value_2
+    RunningStateDto:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+            - IDLE
+            - RUNNING
+          example: IDLE
+        run_duration:
+          type: number
+          example: 5
+        elapsed_seconds:
+          type: number
+          example: 0
+      required:
+        - state
+        - run_duration
+        - elapsed_seconds
+    SetRunDurationDto:
+      type: object
+      properties:
+        run_duration:
+          type: number
+          example: 7
+      required:
+        - run_duration
+    PostDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: b5e1f6a1-2b6b-4b3f-9c0b-1234567890ab
+        date:
+          type: string
+          example: '2026-02-15T12:34:56.000Z'
+        topic:
+          type: string
+          example: NestJS Best Practices
+        message:
+          type: string
+          example: This is a sample blog post message.
+      required:
+        - id
+        - date
+        - topic
+        - message
+    CreatePostBodyDto:
+      type: object
+      properties:
+        date:
+          type: string
+          example: '2026-02-15T12:34:56.000Z'
+        topic:
+          type: string
+          example: NestJS Best Practices
+        message:
+          type: string
+          example: This is a sample blog post message.
+      required:
+        - topic
+        - message
+    UpdatePostBodyDto:
+      type: object
+      properties:
+        date:
+          type: string
+          example: '2026-02-15T12:34:56.000Z'
+        topic:
+          type: string
+          example: Updated Topic
+        message:
+          type: string
+          example: Updated message.
+    EmployeeDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        first_name:
+          type: string
+          example: Jane
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: jane.doe1@company.com
+        department:
+          type: string
+          example: Engineering
+        job_title:
+          type: string
+          example: Software Engineer
+        hire_date:
+          type: string
+          example: '2020-01-15'
+        salary:
+          type: number
+          example: 90000
+        status:
+          type: string
+          example: Active
+        location:
+          type: string
+          example: New York
+        manager_id:
+          type: object
+          example: 5
+          nullable: true
+        performance_rating:
+          type: number
+          example: 4
+      required:
+        - id
+        - first_name
+        - last_name
+        - email
+        - department
+        - job_title
+        - hire_date
+        - salary
+        - status
+        - location
+        - manager_id
+        - performance_rating
+    PaginatedEmployeesDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeDto'
+        total:
+          type: number
+          example: 1000
+        skip:
+          type: number
+          example: 0
+        take:
+          type: number
+          example: 100
+      required:
+        - data
+        - total
+        - skip
+        - take
+    EmployeeDetailDto:
+      type: object
+      properties:
+        employee_id:
+          type: number
+          example: 1
+        first_name:
+          type: string
+          example: Jane
+        last_name:
+          type: string
+          example: Doe
+        date_of_birth:
+          type: string
+          example: '1990-04-12'
+        gender:
+          type: string
+          example: Female
+        marital_status:
+          type: string
+          example: Single
+        dependents:
+          type: number
+          example: 0
+        nationality:
+          type: string
+          example: USA
+        ssn:
+          type: string
+          example: '***-**-1234'
+        street_address:
+          type: string
+          example: 123 Main St
+        city:
+          type: string
+          example: New York
+        state:
+          type: string
+          example: NY
+        postal_code:
+          type: string
+          example: '10001'
+        country:
+          type: string
+          example: USA
+        home_phone:
+          type: string
+          example: 555-555-0000
+        mobile_phone:
+          type: string
+          example: 555-555-0001
+        work_phone:
+          type: string
+          example: 555-555-0002
+        work_extension:
+          type: string
+          example: '1234'
+        emergency_contact_name:
+          type: string
+          example: John Doe
+        emergency_contact_phone:
+          type: string
+          example: 555-555-1111
+        emergency_contact_relationship:
+          type: string
+          example: Spouse
+        bank_name:
+          type: string
+          example: Bank of Example
+        bank_account:
+          type: string
+          example: '****5678'
+        routing_number:
+          type: string
+          example: '*****111'
+        tax_id:
+          type: string
+          example: '***-**-4321'
+        drivers_license:
+          type: string
+          example: D1234567
+        drivers_license_state:
+          type: string
+          example: NY
+        blood_type:
+          type: string
+          example: O+
+        medical_conditions:
+          type: string
+          example: None
+        allergies:
+          type: string
+          example: Peanuts
+        dietary_restrictions:
+          type: string
+          example: Vegetarian
+        shirt_size:
+          type: string
+          example: M
+        notes:
+          type: string
+          example: ''
+      required:
+        - employee_id
+        - first_name
+        - last_name
+        - date_of_birth
+        - gender
+        - marital_status
+        - dependents
+        - nationality
+        - ssn
+        - street_address
+        - city
+        - state
+        - postal_code
+        - country
+        - home_phone
+        - mobile_phone
+        - work_phone
+        - work_extension
+        - emergency_contact_name
+        - emergency_contact_phone
+        - emergency_contact_relationship
+        - bank_name
+        - bank_account
+        - routing_number
+        - tax_id
+        - drivers_license
+        - drivers_license_state
+        - blood_type
+        - medical_conditions
+        - allergies
+        - dietary_restrictions
+        - shirt_size
+        - notes
+    PaginatedEmployeeDetailsDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeDetailDto'
+        total:
+          type: number
+          example: 1000
+        skip:
+          type: number
+          example: 0
+        take:
+          type: number
+          example: 100
+      required:
+        - data
+        - total
+        - skip
+        - take
+    UpdateEmployeeDetailDto:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Jane
+        last_name:
+          type: string
+          example: Doe
+        date_of_birth:
+          type: string
+          example: '1990-04-12'
+        gender:
+          type: string
+          example: Female
+        marital_status:
+          type: string
+          example: Single
+        dependents:
+          type: number
+          example: 0
+        nationality:
+          type: string
+          example: USA
+        street_address:
+          type: string
+          example: 123 Main St
+        city:
+          type: string
+          example: New York
+        state:
+          type: string
+          example: NY
+        postal_code:
+          type: string
+          example: '10001'
+        mobile_phone:
+          type: string
+          example: 555-555-0001
+        work_phone:
+          type: string
+          example: 555-555-0002
+        emergency_contact_name:
+          type: string
+          example: John Doe
+        emergency_contact_phone:
+          type: string
+          example: 555-555-1111
+        emergency_contact_relationship:
+          type: string
+          example: Spouse
+        bank_name:
+          type: string
+          example: Bank of Example
+        blood_type:
+          type: string
+          example: O+
+        medical_conditions:
+          type: string
+          example: None
+        allergies:
+          type: string
+          example: Peanuts
+        dietary_restrictions:
+          type: string
+          example: Vegetarian
+        shirt_size:
+          type: string
+          example: M
+        notes:
+          type: string
+          example: ''

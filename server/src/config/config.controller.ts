@@ -1,9 +1,13 @@
 import { Controller, Get, Put, Body, Inject, forwardRef, ConflictException } from '@nestjs/common';
+import { ApiBody, ApiConflictResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ConfigService } from './config.service';
 import type { IDemoConfig } from '../../../shared/src/model.interfaces';
 import { AppGateway } from '../app.gateway';
 import { RunningStateService } from './running-state.service';
+import { DemoConfigDto } from './dto/demo-config.dto';
+import { UpdateDemoConfigDto } from './dto/update-demo-config.dto';
 
+@ApiTags('Config')
 @Controller('config')
 export class ConfigController {
   constructor(
@@ -14,12 +18,16 @@ export class ConfigController {
   ) { }
 
   @Get()
+  @ApiOkResponse({ type: DemoConfigDto })
   getConfig(): IDemoConfig {
     return this.configService.getConfig();
   }
 
   @Put()
-  updateConfig(@Body() updates: Partial<IDemoConfig>): IDemoConfig {
+  @ApiBody({ type: UpdateDemoConfigDto })
+  @ApiOkResponse({ type: DemoConfigDto })
+  @ApiConflictResponse({ description: 'Config update rejected: system is running' })
+  updateConfig(@Body() updates: UpdateDemoConfigDto): IDemoConfig {
     if (!this.runningStateService.isIdle()) {
       throw new ConflictException('Config update rejected: system is running');
     }
