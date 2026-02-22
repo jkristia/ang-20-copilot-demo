@@ -4,6 +4,7 @@ import { DemoConfigPageComponent } from './components/demo-config-page/demo-conf
 import { EmployeesPageComponent } from './components/employees-page/employees-page.component';
 import { EmployeesListComponent } from './components/employees/employees.component';
 import { EmployeeDetailsListComponent } from './components/employee-details-list/employee-details-list.component';
+import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 import { APP_ROUTES } from './app.routes.constants';
 
 export const routes: Routes = [
@@ -17,5 +18,6 @@ export const routes: Routes = [
       { path: 'details', component: EmployeeDetailsListComponent },
     ],
   },
+  { path: APP_ROUTES.BAR_CHART, component: BarChartComponent },
   { path: '**', redirectTo: APP_ROUTES.POSTS },
 ];

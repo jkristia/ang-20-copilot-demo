@@ -57,3 +57,33 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+## Bar Chart Demo
+
+The application includes a bar chart demo page accessible at `#/bar-chart` that displays the same mock data using three different chart libraries:
+
+- **ngx-charts** (`@swimlane/ngx-charts`)
+- **ng2-charts** (Chart.js wrapper for Angular)
+- **Plotly** (`angular-plotly.js`)
+
+### Layout
+- Charts are displayed in individual components: `NgxBarChartComponent`, `Ng2BarChartComponent`, `PlotlyBarChartComponent`.
+- Responsive layout: two charts on the first row, one on the second (with wrapping).
+- Each chart card has a max width (700px) and charts are sized to fit without overflow or horizontal scroll.
+
+### Data
+- Mock data is provided via `ChartDataService`.
+- Data represents monthly sales figures for 10 months.
+
+### Navigation
+- Access the demo via the toolbar button or `#/bar-chart` route.
+
+### Customization
+- Animations are disabled for all charts.
+- Chart cards and charts are responsive and will not overflow.
+
+### Chart Dependencies
+- `@swimlane/ngx-charts`
+- `ng2-charts` and `chart.js`
+- `angular-plotly.js` and `plotly.js-dist-min`

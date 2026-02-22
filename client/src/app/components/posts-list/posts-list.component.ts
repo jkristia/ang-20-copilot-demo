@@ -164,4 +164,8 @@ export class PostsListComponent implements OnInit {
   goToEmployees(): void {
     this.router.navigate([APP_ROUTES.EMPLOYEES]);
   }
+
+  goToBarChart(): void {
+    this.router.navigate([APP_ROUTES.BAR_CHART]);
+  }
 }

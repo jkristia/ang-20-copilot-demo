@@ -146,6 +146,16 @@ goal is to create an angular 20 project simulating a block post site, including 
 - if necessary refactor API, but keep it clean as the same will be used for other tables, e.g. the employees table is next.
 	- update api.rest as needed
 
+## step12
+- goal is to add a page with a bar-chart, should be accessible via #/bar-chart
+- I want the same data presented using ngx-charts, ng2-charts and plotly
+- stack the chart vertivally on the same bar-chart page
+- for now, generate mock data in a shared location on the client side, later this will be accessible through ChartService
+- create some meaningful data for a bar chart with 10 bars
+- disable any animation on the charts
+- update docs as necessary
+
+
 ## TODO
 - client table store should not cache the table once the last component is destroyed.
 	either the store should be injected at component level or

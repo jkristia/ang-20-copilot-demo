@@ -1,0 +1,58 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="navigateBack()" matTooltip="Back to Posts">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>Bar Chart Demo</span>
+</mat-toolbar>
+
+<div class="bar-chart-container">
+  <!-- ngx-charts -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>ngx-charts</mat-card-title>
+      <mat-card-subtitle>&#64;swimlane/ngx-charts bar chart</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-ngx-bar-chart
+        [data]="barChartData"
+        [view]="ngxChartView"
+        [colorScheme]="ngxColorScheme"
+        [showXAxis]="ngxShowXAxis"
+        [showYAxis]="ngxShowYAxis"
+        [showXAxisLabel]="ngxShowXAxisLabel"
+        [showYAxisLabel]="ngxShowYAxisLabel"
+        [xAxisLabel]="ngxXAxisLabel"
+        [yAxisLabel]="ngxYAxisLabel">
+      </app-ngx-bar-chart>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- ng2-charts -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>ng2-charts</mat-card-title>
+      <mat-card-subtitle>Chart.js wrapper for Angular</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-ng2-bar-chart
+        [data]="ng2ChartData"
+        [options]="ng2ChartOptions">
+      </app-ng2-bar-chart>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Plotly -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Plotly</mat-card-title>
+      <mat-card-subtitle>angular-plotly.js integration</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-plotly-bar-chart
+        [data]="plotlyData"
+        [layout]="plotlyLayout"
+        [config]="plotlyConfig">
+      </app-plotly-bar-chart>
+    </mat-card-content>
+  </mat-card>
+</div>
