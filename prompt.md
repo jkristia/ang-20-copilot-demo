@@ -155,6 +155,23 @@ goal is to create an angular 20 project simulating a block post site, including 
 - disable any animation on the charts
 - update docs as necessary
 
+## step13
+- i want to add e2e test using playwright
+- install playwright and any dependencies, I will install the vscode extension
+- add new tests in /e2e
+	- first test should verify the app is running and available
+
+## step14
+- add a new e2e test, it should verify a new post can be added and the post is highlighted'
+- go to Blog Posts page
+- make sure 'new post' button is available and is enabled
+- click the button, make sure the 'Create New Post' dialog shows
+- enter topic 'my test post'
+- enter message '123456789', verify the Create button is disabled as the message length should be > 10 characters
+- add additional '123456789' and create the post
+- verify the post is added as the first post in the list
+- when added, the post should briefly change background color to indicate new post, verify this is happening
+
 
 ## TODO
 - client table store should not cache the table once the last component is destroyed.

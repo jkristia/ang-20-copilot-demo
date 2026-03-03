@@ -1,4 +1,4 @@
-.PHONY: help server client install install-shared install-server install-client generate-data kill run-all
+.PHONY: help server client install install-shared install-server install-client generate-data kill run-all e2e test
 
 .DEFAULT_GOAL := help
 
@@ -53,3 +53,9 @@ run-all: ensure-data ## Start client (background) and server (foreground)
 	@sleep 2
 	@echo "Starting server..."
 	cd server && npm run start:dev
+
+test: ## Run e2e tests with Playwright
+	npm test
+
+test-ui: ## Run e2e tests in UI mode
+	npm run test:ui

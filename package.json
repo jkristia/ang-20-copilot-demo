@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "start:all": "concurrently \"cd server && npm run start:dev\" \"cd client && npm start\""
   },
   "keywords": [],
   "author": "",
@@ -15,5 +17,9 @@
     "chart.js": "^4.5.1",
     "ng2-charts": "^8.0.0",
     "plotly.js-dist-min": "^3.4.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "concurrently": "^9.2.1"
   }
 }

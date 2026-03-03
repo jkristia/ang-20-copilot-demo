@@ -249,3 +249,42 @@ make generate-data
 | dietary_restrictions         | string  | Dietary restrictions                 |
 | shirt_size                   | string  | Shirt size (XS-XXL)                  |
 | notes                        | string  | Additional notes                     |
+
+## End-to-End Tests
+
+E2E tests are implemented using [Playwright](https://playwright.dev/) and are located in the `/e2e` directory.
+
+### Running Tests
+
+```bash
+# Run all tests
+make test
+
+# Run tests in UI mode (interactive)
+make test-ui
+
+# Or use npm directly
+npm test
+npm run test:ui
+```
+
+### Test Structure
+
+Tests are organized in the `/e2e` directory:
+
+- `app.spec.ts` - Basic application tests (startup, availability)
+
+### Test Configuration
+
+The Playwright configuration is defined in `playwright.config.ts` at the project root. It is configured to:
+
+- Run tests against `http://localhost:4200`
+- Automatically start the client and server using the `start:all` npm script
+- Run tests in chromium, firefox, and webkit browsers
+- Generate HTML reports after test execution
+- Retry failed tests in CI environments
+
+### How Tests Work
+
+Tests are designed to run independently and do not require manual server/client startup. Playwright automatically launches both services when tests begin and tears them down when complete.
+
