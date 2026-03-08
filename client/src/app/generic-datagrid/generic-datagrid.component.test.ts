@@ -1,15 +1,17 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import {
+  CellChange,
   DataGridComponent,
   DataGridConfig,
-} from '../components/data-grid/data-grid.component';
+} from './data-grid/data-grid.component';
 import { DataGridColumnSchema } from './datagrid-schema';
 import { GenericDatagridComponent } from './generic-datagrid.component';
 
 interface DemoRow {
+  rowId: string;
   device: string;
   mask: number;
 }
@@ -31,14 +33,17 @@ const DEMO_SCHEMA: readonly DataGridColumnSchema<DemoRow>[] = [
 
 const DEMO_ROWS: readonly DemoRow[] = [
   {
+    rowId: 'row-0',
     device: 'device.0',
     mask: 24,
   },
   {
+    rowId: 'row-1',
     device: 'device.1',
     mask: 24,
   },
   {
+    rowId: 'row-2',
     device: 'device.2',
     mask: 24,
   },
@@ -55,6 +60,7 @@ class DataGridStubComponent<TRow extends object = Record<string, unknown>> {
   public readonly totalRows = input<number>(0);
   public readonly loading = input<boolean>(false);
   public readonly themeVariables = input<Record<string, string>>({});
+  public readonly cellValueChanged = output<CellChange<TRow>>();
 }
 
 describe('GenericDatagridComponent', () => {
@@ -198,5 +204,49 @@ describe('GenericDatagridComponent', () => {
       resizable: false,
     });
     expect(defaultColDef?.filterParams).toBeUndefined();
+  });
+
+  it('forwards cell value changes from inner data grid', () => {
+    const fixture = TestBed.createComponent(GenericDatagridComponent<DemoRow>);
+    fixture.componentRef.setInput('schema', DEMO_SCHEMA);
+    fixture.componentRef.setInput('rows', DEMO_ROWS);
+    fixture.detectChanges();
+
+    const emittedChanges: CellChange<DemoRow>[] = [];
+    fixture.componentInstance.cellValueChanged.subscribe((change) => emittedChanges.push(change));
+
+    const gridStub = fixture.debugElement.query(By.directive(DataGridStubComponent));
+    const gridStubComponent = gridStub.componentInstance as DataGridStubComponent<DemoRow>;
+
+    gridStubComponent.cellValueChanged.emit({
+      data: DEMO_ROWS[0] as DemoRow,
+      field: 'device',
+      oldValue: 'device.0',
+      newValue: 'device.0-updated',
+    });
+
+    expect(emittedChanges).toEqual([
+      {
+        data: DEMO_ROWS[0],
+        field: 'device',
+        oldValue: 'device.0',
+        newValue: 'device.0-updated',
+      },
+    ]);
+  });
+
+  it('passes getRowId through to inner data-grid config', () => {
+    const fixture = TestBed.createComponent(GenericDatagridComponent<DemoRow>);
+    fixture.componentRef.setInput('schema', DEMO_SCHEMA);
+    fixture.componentRef.setInput('rows', DEMO_ROWS);
+    fixture.componentRef.setInput('getRowId', (row: DemoRow) => row.rowId);
+    fixture.detectChanges();
+
+    const gridStub = fixture.debugElement.query(By.directive(DataGridStubComponent));
+    const gridStubComponent = gridStub.componentInstance as DataGridStubComponent<DemoRow>;
+    const config = gridStubComponent.config();
+
+    expect(config.getRowId).toBeDefined();
+    expect(config.getRowId?.(DEMO_ROWS[0] as DemoRow)).toBe('row-0');
   });
 });

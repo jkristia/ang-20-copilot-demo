@@ -1,10 +1,11 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 
 import {
+  CellChange,
   DataGridComponent,
   DataGridConfig,
-} from '../components/data-grid/data-grid.component';
+} from './data-grid/data-grid.component';
 import { DataGridColumnSchema } from './datagrid-schema';
 import {
   resolveGenericDatagridOptions,
@@ -28,6 +29,8 @@ export class GenericDatagridComponent<TRow extends object = Record<string, unkno
   public readonly rows = input.required<readonly TRow[]>();
   public readonly rowCountLabel = input<string>('Rows');
   public readonly options = input<GenericDatagridOptions>({});
+  public readonly getRowId = input<((row: TRow) => string | number) | undefined>(undefined);
+  public readonly cellValueChanged = output<CellChange<TRow>>();
 
   private readonly schemaToColumnDefsUtil = new SchemaToColumnDefsUtil<TRow>();
 
@@ -68,10 +71,19 @@ export class GenericDatagridComponent<TRow extends object = Record<string, unkno
     return toGenericDatagridThemeVariables(this.resolvedOptions());
   });
 
-  public readonly gridConfig = computed<DataGridConfig<TRow>>(() => ({
-    columnDefs: this.columnDefs(),
-    defaultColDef: this.resolvedDefaultColDef(),
-    rowSelection: 'single',
-    rowHeight: 40,
-  }));
+  public readonly gridConfig = computed<DataGridConfig<TRow>>(() => {
+    const getRowId = this.getRowId();
+
+    return {
+      columnDefs: this.columnDefs(),
+      defaultColDef: this.resolvedDefaultColDef(),
+      rowSelection: 'single',
+      rowHeight: 40,
+      ...(getRowId ? { getRowId } : {}),
+    };
+  });
+
+  public onCellValueChanged(change: CellChange<TRow>): void {
+    this.cellValueChanged.emit(change);
+  }
 }

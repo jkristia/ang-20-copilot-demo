@@ -1,5 +1,49 @@
 # Data Grid Project Notes
 
+## 2026-03-08 - Step 3 Renderers and Editors
+- Extended `DataGridColumnSchema` with Step 3 metadata:
+	- `readOnly` (boolean or row predicate)
+	- `disabled` (boolean or row predicate)
+	- optional `cellRenderer` / `cellRendererParams`
+	- optional `cellEditor` / `cellEditorParams`
+- Added generic reusable `IPv4EditorComponent` at `client/src/app/generic-datagrid/editors/ipv4-editor.component.ts`.
+- Added generic reusable `IntEditorComponent` at `client/src/app/generic-datagrid/editors/int-editor.component.ts`.
+- Added generic reusable `MacEditorComponent` at `client/src/app/generic-datagrid/editors/mac-editor.component.ts`.
+- Wired `fieldType: 'ipv4'` to use `IPv4EditorComponent` by default in schema-to-colDef mapping.
+- Wired `fieldType: 'int'` to use `IntEditorComponent` by default in schema-to-colDef mapping.
+- Wired `fieldType: 'mac'` to use `MacEditorComponent` by default in schema-to-colDef mapping.
+- Added optional `min` / `max` numeric constraints to `DataGridColumnSchema` and pass them into editor params.
+- Added `mask` range constraints (`min: 8`, `max: 31`) in `NETWORK_DEVICE_SCHEMA`; out-of-range edits are clamped by `IntEditor` before commit.
+- Added network-device-specific `LinkStateCellRendererComponent` at `client/src/app/components/network-device-page/editors/link-state-cell-renderer.component.ts`.
+- Updated `NETWORK_DEVICE_SCHEMA`:
+	- `device` is now `readOnly: true`
+	- `linkState` now uses the custom read-only renderer
+- Added read-only/disabled visual states via AG Grid cell classes:
+	- `.gd-cell-readonly` (slightly dimmed)
+	- `.gd-cell-disabled` (grayed, non-interactive)
+- Added generic edit event forwarding:
+	- `DataGridComponent` -> `GenericDatagridComponent` -> `NetworkDevicePageComponent`
+- Added store update flow for editable network-device fields (`ip`, `mask`, `gateway`, `mac`) via `NetworkDeviceStore.updateField(...)`.
+- Refactored update flow to pass raw `field` strings from grid events and perform schema-driven editability checks (`readOnly` and dynamic `disabled`) before merge/update.
+- Added stable row identity to `NetworkDeviceRow` as `rowId`, and switched `NetworkDeviceStore.updateField(...)` targeting from `device` to `rowId`.
+- Wired AG Grid row identity for network-device grids by binding `getRowId` to `row.rowId`.
+- Moved reusable update helpers into `GenericDatagridStore`:
+	- `withUpdatedField(...)` for schema-driven row patching
+	- `isEditable(...)` / `resolveColumnState(...)` for read-only/disabled enforcement
+	- `toNormalizedValue(...)` for shared type normalization/clamping
+- Moved reusable `DataGridComponent` from `client/src/app/components/data-grid/` to `client/src/app/generic-datagrid/data-grid/`.
+- Confirmed cross-grid synchronization: edits from one grid update store data and reflect in the second grid bound to the same store.
+- Added/updated `.test.ts` coverage for:
+	- IPv4 editor behavior
+	- Int editor behavior and min/max clamping
+	- MAC editor behavior (hex-and-colon input)
+	- link-state renderer behavior
+	- schema-to-colDef read-only/disabled/editor/renderer mapping
+	- generic store shared update/editability/normalization behavior
+	- generic datagrid event forwarding
+	- network-device page edit propagation to store and both grid instances
+	- network-device store field update behavior
+
 ## 2026-03-08 - Step 2.1 Tweaks
 - Added optional `alignment` to `DataGridColumnSchema` with supported values: `left | center | right`.
 - Added `AlignmentColDefUtil` to keep alignment logic isolated and unit-testable.

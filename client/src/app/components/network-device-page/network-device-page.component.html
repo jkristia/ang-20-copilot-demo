@@ -11,6 +11,8 @@
         [rows]="allRows()"
         [rowCountLabel]="'All Rows'"
         [options]="gridOptions"
+        [getRowId]="getRowId"
+        (cellValueChanged)="onGridCellValueChanged($event)"
       />
     </section>
 
@@ -20,6 +22,8 @@
         [rows]="previewRows()"
         [rowCountLabel]="'Preview Rows'"
         [options]="gridOptions"
+        [getRowId]="getRowId"
+        (cellValueChanged)="onGridCellValueChanged($event)"
       />
     </section>
   </div>

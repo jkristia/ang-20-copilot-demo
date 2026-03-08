@@ -1,4 +1,7 @@
 export * from './datagrid-schema';
+export * from './editors/int-editor.component';
+export * from './editors/mac-editor.component';
+export * from './editors/ipv4-editor.component';
 export * from './generic-datagrid.component';
 export * from './generic-datagrid.theme';
 export * from './generic-datagrid.store';

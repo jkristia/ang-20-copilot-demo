@@ -1,8 +1,10 @@
 import { DataGridColumnSchema } from '../../generic-datagrid/datagrid-schema';
+import { LinkStateCellRendererComponent } from './editors/link-state-cell-renderer.component';
 
 export type NetworkDeviceLinkState = 'link-up' | 'link-down' | 'link-error';
 
 export interface NetworkDeviceRow {
+  rowId: string;
   device: string;
   linkState: NetworkDeviceLinkState;
   ip: string;
@@ -17,12 +19,15 @@ export const NETWORK_DEVICE_SCHEMA: readonly DataGridColumnSchema<NetworkDeviceR
     fieldType: 'string',
     caption: 'Device',
     width: 180,
+    readOnly: true,
   },
   {
     fieldName: 'linkState',
     fieldType: 'enum',
     caption: 'Link State',
     width: 140,
+    readOnly: true,
+    cellRenderer: LinkStateCellRendererComponent,
   },
   {
     fieldName: 'ip',
@@ -35,6 +40,8 @@ export const NETWORK_DEVICE_SCHEMA: readonly DataGridColumnSchema<NetworkDeviceR
     fieldType: 'int',
     caption: 'Mask',
     width: 100,
+    min: 8,
+    max: 31,
   },
   {
     fieldName: 'gateway',

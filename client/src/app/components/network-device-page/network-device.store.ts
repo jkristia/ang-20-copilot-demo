@@ -5,7 +5,10 @@ import {
   DEFAULT_NETWORK_DEVICE_ROW_COUNT,
   util,
 } from './network-device-data';
-import { NetworkDeviceRow, NETWORK_DEVICE_SCHEMA } from './network-device-schema';
+import {
+  NetworkDeviceRow,
+  NETWORK_DEVICE_SCHEMA,
+} from './network-device-schema';
 
 @Injectable({
   providedIn: 'root',
@@ -22,5 +25,19 @@ export class NetworkDeviceStore extends GenericDatagridStore<NetworkDeviceRow> {
     rowCount = DEFAULT_NETWORK_DEVICE_ROW_COUNT,
   ): readonly NetworkDeviceRow[] {
     return util.generate(rowCount);
+  }
+
+  public updateField(
+    rowId: string,
+    field: string,
+    value: unknown,
+  ): void {
+    const nextRows = this.rows().map((row) =>
+      row.rowId === rowId
+        ? this.withUpdatedField(row, field, value)
+        : row,
+    );
+
+    this.setRows(nextRows);
   }
 }

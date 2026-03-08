@@ -63,24 +63,7 @@ export interface DataGridConfig<T> {
       (cellValueChanged)="onCellValueChanged($event)"
     />
   `,
-  styles: [`
-    :host {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    
-    ag-grid-angular {
-      width: 100%;
-      height: 100%;
-    }
-    
-    /* Vertically center cell content */
-    :host ::ng-deep .ag-cell {
-      display: flex;
-      align-items: center;
-    }
-  `]
+  styleUrl: './data-grid.component.scss',
 })
 export class DataGridComponent<T> {
   /** Input data rows */

@@ -14,6 +14,7 @@ class NetworkDeviceDataUtil {
     this.validateRowCount(rowCount);
 
     return Array.from({ length: rowCount }, (_, index) => ({
+      rowId: this.toRowId(index),
       device: `device.${index}`,
       linkState: this.toLinkState(index),
       ip: this.toNetworkIp(index, 2),
@@ -21,6 +22,10 @@ class NetworkDeviceDataUtil {
       gateway: this.toNetworkIp(index, 1),
       mac: this.toMacAddress(index + 1),
     }));
+  }
+
+  private toRowId(index: number): string {
+    return `row-${index}`;
   }
 
   private toLinkState(index: number): NetworkDeviceLinkState {

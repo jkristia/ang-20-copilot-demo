@@ -9,6 +9,7 @@
       [config]="gridConfig()"
       [totalRows]="rowData().length"
       [themeVariables]="gridThemeVariables()"
+      (cellValueChanged)="onCellValueChanged($event)"
     />
   </div>
 </section>
