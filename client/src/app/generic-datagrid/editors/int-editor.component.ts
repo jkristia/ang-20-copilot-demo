@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ICellEditorAngularComp } from 'ag-grid-angular';
 import { ICellEditorParams } from 'ag-grid-community';
 
 import { type DataGridColumnAlignment } from '../datagrid-schema';
@@ -31,7 +32,9 @@ export interface IntEditorParams<TData extends object = Record<string, unknown>>
   `,
   styleUrl: './int-editor.component.scss',
 })
-export class IntEditorComponent<TData extends object = Record<string, unknown>> {
+export class IntEditorComponent<TData extends object = Record<string, unknown>>
+  implements ICellEditorAngularComp
+{
   @ViewChild('editorInput') private readonly editorInput?: ElementRef<HTMLInputElement>;
 
   public value = '';
