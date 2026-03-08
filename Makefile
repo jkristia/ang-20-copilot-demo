@@ -1,11 +1,11 @@
-.PHONY: help server client install install-shared install-server install-client generate-data kill run-all e2e test
+.PHONY: help server client install install-shared install-server install-client generate-data kill run-all test test-e2e test-e2e-ui
 
 .DEFAULT_GOAL := help
 
 help: ## Show available commands
 	@echo "Available commands:"
 	@echo ""
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  make %-15s %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  make %-15s %s\n", $$1, $$2}'
 	@echo ""
 
 install: install-shared install-server install-client ## Install dependencies for both server and client
@@ -54,8 +54,11 @@ run-all: ensure-data ## Start client (background) and server (foreground)
 	@echo "Starting server..."
 	cd server && npm run start:dev
 
-test: ## Run e2e tests with Playwright
+test: ## Run client unit tests (.test.ts)
+	cd client && npm run test -- --runInBand
+
+test-e2e: ## Run e2e tests with Playwright
 	npm test
 
-test-ui: ## Run e2e tests in UI mode
+test-e2e-ui: ## Run e2e tests in UI mode
 	npm run test:ui

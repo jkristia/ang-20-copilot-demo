@@ -1,0 +1,13 @@
+{
+  // Monorepo setup with Jest in both server and client packages.
+  "jest.virtualFolders": [
+    {
+      "name": "server",
+      "rootPath": "server"
+    },
+    {
+      "name": "client",
+      "rootPath": "client"
+    }
+  ]
+}

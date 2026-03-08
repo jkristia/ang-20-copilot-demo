@@ -28,6 +28,7 @@ Create a column schema interface with:
 ## Required Schema
 Create a schema with columns:
 - `device`: `string`
+- `linkState`: `enum` with values `'link-up' | 'link-down' | 'link-error'`
 - `ip`: `ipv4`
 - `mask`: `int`
 - `gateway`: `ipv4`
@@ -36,6 +37,7 @@ Create a schema with columns:
 ## Dummy Data Requirements
 Generate deterministic dummy rows (default: 20 rows):
 - `device`: `device.0`, `device.1`, `device.2`, ...
+- `linkState`: cycle values in this order per row: `link-up`, `link-down`, `link-error`
 - `ip`: start `192.168.0.2`, increment third octet by 1 per row (`192.168.1.2`, `192.168.2.2`, ...)
 - `mask`: `24` for all rows
 - `gateway`: start `192.168.0.1`, increment third octet by 1 per row
@@ -60,4 +62,4 @@ Implement:
 - Schema and rows are exported and consumable by future grid component work.
 - Data generation follows the exact increment rules above.
 - Design decision notes are updated in `docs/datagrid/datagrid-project-notes.md`.
-- Add unit test for data store
+- Add a unit test for the data store using a `.test.ts` filename (not `.spec.ts`).

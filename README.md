@@ -72,6 +72,9 @@ make               # Show available commands
 make install       # Install dependencies for both server and client
 make server        # Start the NestJS backend server (auto-generates mock data if missing)
 make client        # Start the Angular frontend client
+make test          # Run client unit tests (.test.ts)
+make test-e2e      # Run Playwright end-to-end tests
+make test-e2e-ui   # Run Playwright end-to-end tests in UI mode
 make generate-data # Regenerate all mock data files
 make kill          # Kill server (port 3000) and client (port 4200) if running
 make run-all       # Start client (background) and server (foreground)
