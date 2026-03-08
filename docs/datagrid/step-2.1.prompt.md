@@ -68,3 +68,38 @@ Add configurable grid-line options to `app-generic-datagrid`.
 - Vertical and horizontal line styles can be toggled independently.
 - Network-device page binds explicit line-option values for both grids.
 - All related `.test.ts` files pass.
+
+## Tweak 3 - Expose Default Column Options
+
+## Goal
+Expose AG Grid `defaultColDef` basics through `GenericDatagridOptions`, and make the default filter behavior use `contains` only.
+
+## Requirements
+- Add nested options under `GenericDatagridOptions.defaultColDef` for:
+  - `sortable`
+  - `filter`
+  - `resizable`
+  - `filterMode` (`contains-only | ag-grid-default`)
+- Keep all options optional with sensible defaults.
+- Keep default behavior equivalent to current UX (`sortable: true`, `filter: true`, `resizable: true`).
+- Default filter behavior should be `contains-only`:
+  - use AG text filter
+  - expose only the `contains` operator
+  - allow only one condition
+- Keep option resolution in `generic-datagrid.theme.ts`; keep component logic focused on wiring.
+- Add `.test.ts` coverage for:
+  - default contains-only behavior
+  - override behavior for `defaultColDef` and `filterMode`
+
+## Deliverables
+1. `GenericDatagridOptions` update with nested `defaultColDef` options.
+2. Resolved options/defaults in `generic-datagrid.theme.ts`.
+3. `GenericDatagridComponent` wiring from resolved options into `gridConfig.defaultColDef`.
+4. Tests that validate both default and overridden behavior.
+5. Notes update in `docs/datagrid/datagrid-project-notes.md`.
+
+## Acceptance Criteria
+- `defaultColDef.sortable`, `defaultColDef.filter`, and `defaultColDef.resizable` can be set via `GenericDatagridOptions`.
+- Default filter mode is `contains-only`.
+- `ag-grid-default` mode preserves AG Grid default filter behavior.
+- All related `.test.ts` files pass.

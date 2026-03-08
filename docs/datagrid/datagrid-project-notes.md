@@ -15,6 +15,9 @@
 - Added `themeVariables` input on `DataGridComponent` and apply variables at the `ag-grid-angular` theme root to ensure AG Grid variables resolve correctly.
 - Bound line options in `NetworkDevicePageComponent`; current page configuration sets both toggles to `false` for both grid instances.
 - Moved network-device-specific schema/data/store files from `client/src/app/generic-datagrid/` to `client/src/app/components/network-device-page/` to keep generic datagrid code domain-agnostic.
+- Exposed `defaultColDef` settings through `GenericDatagridOptions` (`sortable`, `filter`, `resizable`, `filterMode`).
+- Added default filter mode `contains-only`, implemented as AG text filter with only `contains` allowed and a single condition.
+- Added component tests for default contains-only behavior and for `ag-grid-default` override behavior.
 
 ## 2026-03-08 - Step 2 Rendering
 - Added route constant `NETWORK_DEVICE` and route entry for `#/network-device`.

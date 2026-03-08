@@ -10,6 +10,7 @@ import {
   resolveGenericDatagridOptions,
   toGenericDatagridThemeVariables,
   type GenericDatagridOptions,
+  type ResolvedGenericDatagridOptions,
 } from './generic-datagrid.theme';
 import { SchemaToColumnDefsUtil } from './utils/schema-to-column-defs.util';
 
@@ -36,8 +37,31 @@ export class GenericDatagridComponent<TRow extends object = Record<string, unkno
 
   public readonly rowData = computed<TRow[]>(() => [...this.rows()]);
 
-  public readonly resolvedOptions = computed<Required<GenericDatagridOptions>>(() => {
+  public readonly resolvedOptions = computed<ResolvedGenericDatagridOptions>(() => {
     return resolveGenericDatagridOptions(this.options());
+  });
+
+  private readonly resolvedDefaultColDef = computed<ColDef<TRow>>(() => {
+    const options = this.resolvedOptions().defaultColDef;
+
+    const defaultColDef: ColDef<TRow> = {
+      sortable: options.sortable,
+      filter: options.filter,
+      resizable: options.resizable,
+    };
+
+    if (options.filter && options.filterMode === 'contains-only') {
+      // AG Grid Text Filter docs: https://www.ag-grid.com/angular-data-grid/filter-text/
+      defaultColDef.filter = 'agTextColumnFilter';
+      defaultColDef.filterParams = {
+        filterOptions: ['contains'],
+        defaultOption: 'contains',
+        maxNumConditions: 1,
+        suppressAndOrCondition: true,
+      };
+    }
+
+    return defaultColDef;
   });
 
   public readonly gridThemeVariables = computed<Record<string, string>>(() => {
@@ -46,11 +70,7 @@ export class GenericDatagridComponent<TRow extends object = Record<string, unkno
 
   public readonly gridConfig = computed<DataGridConfig<TRow>>(() => ({
     columnDefs: this.columnDefs(),
-    defaultColDef: {
-      sortable: true,
-      filter: true,
-      resizable: true,
-    },
+    defaultColDef: this.resolvedDefaultColDef(),
     rowSelection: 'single',
     rowHeight: 40,
   }));

@@ -16,7 +16,7 @@ import { NetworkDeviceStore } from './network-device.store';
 export class NetworkDevicePageComponent {
   private readonly networkDeviceStore = inject(NetworkDeviceStore);
 
-  public readonly gridOptions: Readonly<Required<GenericDatagridOptions>> = {
+  public readonly gridOptions: Readonly<GenericDatagridOptions> = {
     verticalGridLines: false,
     horizontalGridLines: false,
   };

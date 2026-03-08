@@ -1,14 +1,42 @@
 export interface GenericDatagridOptions {
   verticalGridLines?: boolean;
   horizontalGridLines?: boolean;
+  defaultColDef?: GenericDatagridDefaultColDefOptions;
 }
 
-export type ResolvedGenericDatagridOptions = Readonly<Required<GenericDatagridOptions>>;
+export interface GenericDatagridDefaultColDefOptions {
+  sortable?: boolean;
+  filter?: boolean;
+  resizable?: boolean;
+  filterMode?: GenericDatagridFilterMode;
+}
+
+export type GenericDatagridFilterMode = 'contains-only' | 'ag-grid-default';
+
+export interface ResolvedGenericDatagridDefaultColDefOptions {
+  sortable: boolean;
+  filter: boolean;
+  resizable: boolean;
+  filterMode: GenericDatagridFilterMode;
+}
+
+export interface ResolvedGenericDatagridOptions {
+  verticalGridLines: boolean;
+  horizontalGridLines: boolean;
+  defaultColDef: ResolvedGenericDatagridDefaultColDefOptions;
+}
+
 export type GenericDatagridThemeVariables = Readonly<Record<string, string>>;
 
 const DEFAULT_GENERIC_DATAGRID_OPTIONS: ResolvedGenericDatagridOptions = {
   verticalGridLines: true,
   horizontalGridLines: true,
+  defaultColDef: {
+    sortable: true,
+    filter: true,
+    resizable: true,
+    filterMode: 'contains-only',
+  },
 };
 
 export function resolveGenericDatagridOptions(
@@ -19,6 +47,16 @@ export function resolveGenericDatagridOptions(
       options.verticalGridLines ?? DEFAULT_GENERIC_DATAGRID_OPTIONS.verticalGridLines,
     horizontalGridLines:
       options.horizontalGridLines ?? DEFAULT_GENERIC_DATAGRID_OPTIONS.horizontalGridLines,
+    defaultColDef: {
+      sortable:
+        options.defaultColDef?.sortable ?? DEFAULT_GENERIC_DATAGRID_OPTIONS.defaultColDef.sortable,
+      filter: options.defaultColDef?.filter ?? DEFAULT_GENERIC_DATAGRID_OPTIONS.defaultColDef.filter,
+      resizable:
+        options.defaultColDef?.resizable ?? DEFAULT_GENERIC_DATAGRID_OPTIONS.defaultColDef.resizable,
+      filterMode:
+        options.defaultColDef?.filterMode ??
+        DEFAULT_GENERIC_DATAGRID_OPTIONS.defaultColDef.filterMode,
+    },
   };
 }
 

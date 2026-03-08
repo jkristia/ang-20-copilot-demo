@@ -148,4 +148,55 @@ describe('GenericDatagridComponent', () => {
       '--ag-row-border-width': '1px',
     });
   });
+
+  it('defaults defaultColDef filtering to contains-only mode', () => {
+    const fixture = TestBed.createComponent(GenericDatagridComponent<DemoRow>);
+
+    fixture.componentRef.setInput('schema', DEMO_SCHEMA);
+    fixture.componentRef.setInput('rows', DEMO_ROWS);
+    fixture.detectChanges();
+
+    const gridStub = fixture.debugElement.query(By.directive(DataGridStubComponent));
+    const gridStubComponent = gridStub.componentInstance as DataGridStubComponent<DemoRow>;
+    const defaultColDef = gridStubComponent.config().defaultColDef;
+
+    expect(defaultColDef).toMatchObject({
+      sortable: true,
+      filter: 'agTextColumnFilter',
+      resizable: true,
+      filterParams: {
+        filterOptions: ['contains'],
+        defaultOption: 'contains',
+        maxNumConditions: 1,
+        suppressAndOrCondition: true,
+      },
+    });
+  });
+
+  it('allows overriding defaultColDef options and filter mode', () => {
+    const fixture = TestBed.createComponent(GenericDatagridComponent<DemoRow>);
+
+    fixture.componentRef.setInput('schema', DEMO_SCHEMA);
+    fixture.componentRef.setInput('rows', DEMO_ROWS);
+    fixture.componentRef.setInput('options', {
+      defaultColDef: {
+        sortable: false,
+        filter: true,
+        resizable: false,
+        filterMode: 'ag-grid-default',
+      },
+    });
+    fixture.detectChanges();
+
+    const gridStub = fixture.debugElement.query(By.directive(DataGridStubComponent));
+    const gridStubComponent = gridStub.componentInstance as DataGridStubComponent<DemoRow>;
+    const defaultColDef = gridStubComponent.config().defaultColDef;
+
+    expect(defaultColDef).toMatchObject({
+      sortable: false,
+      filter: true,
+      resizable: false,
+    });
+    expect(defaultColDef?.filterParams).toBeUndefined();
+  });
 });
