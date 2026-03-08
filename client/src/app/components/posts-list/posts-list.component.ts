@@ -168,4 +168,8 @@ export class PostsListComponent implements OnInit {
   goToBarChart(): void {
     this.router.navigate([APP_ROUTES.BAR_CHART]);
   }
+
+  goToNetworkDevice(): void {
+    this.router.navigate([APP_ROUTES.NETWORK_DEVICE]);
+  }
 }

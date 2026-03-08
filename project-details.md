@@ -257,11 +257,14 @@ E2E tests are implemented using [Playwright](https://playwright.dev/) and are lo
 ### Running Tests
 
 ```bash
-# Run all tests
+# Run client unit tests (Jest)
 make test
 
-# Run tests in UI mode (interactive)
-make test-ui
+# Run e2e tests
+make test-e2e
+
+# Run e2e tests in UI mode (interactive)
+make test-e2e-ui
 
 # Or use npm directly
 npm test

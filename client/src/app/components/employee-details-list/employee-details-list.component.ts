@@ -5,7 +5,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ColDef } from 'ag-grid-community';
 import { EmployeeDetail } from '@blog/shared';
 import { EmployeeDetailsStore } from '../../services/employee-details.store';
-import { DataGridComponent, DataGridConfig, CellChange } from '../data-grid/data-grid.component';
+import {
+  DataGridComponent,
+  DataGridConfig,
+  CellChange,
+} from '../../generic-datagrid/data-grid/data-grid.component';
 
 @Component({
   selector: 'app-employee-details-list',

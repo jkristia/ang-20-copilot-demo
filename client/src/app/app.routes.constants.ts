@@ -3,4 +3,5 @@ export const APP_ROUTES = {
   CONFIG: 'demo-config',
   EMPLOYEES: 'employees',
   BAR_CHART: 'bar-chart',
+  NETWORK_DEVICE: 'network-device',
 } as const;

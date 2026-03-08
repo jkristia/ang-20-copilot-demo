@@ -1,0 +1,96 @@
+# Data Grid Project Notes
+
+## 2026-03-08 - Step 3 Renderers and Editors
+- Extended `DataGridColumnSchema` with Step 3 metadata:
+	- `readOnly` (boolean or row predicate)
+	- `disabled` (boolean or row predicate)
+	- optional `cellRenderer` / `cellRendererParams`
+	- optional `cellEditor` / `cellEditorParams`
+- Added generic reusable `IPv4EditorComponent` at `client/src/app/generic-datagrid/editors/ipv4-editor.component.ts`.
+- Added generic reusable `IntEditorComponent` at `client/src/app/generic-datagrid/editors/int-editor.component.ts`.
+- Added generic reusable `MacEditorComponent` at `client/src/app/generic-datagrid/editors/mac-editor.component.ts`.
+- Wired `fieldType: 'ipv4'` to use `IPv4EditorComponent` by default in schema-to-colDef mapping.
+- Wired `fieldType: 'int'` to use `IntEditorComponent` by default in schema-to-colDef mapping.
+- Wired `fieldType: 'mac'` to use `MacEditorComponent` by default in schema-to-colDef mapping.
+- Added optional `min` / `max` numeric constraints to `DataGridColumnSchema` and pass them into editor params.
+- Added `mask` range constraints (`min: 8`, `max: 31`) in `NETWORK_DEVICE_SCHEMA`; out-of-range edits are clamped by `IntEditor` before commit.
+- Added network-device-specific `LinkStateCellRendererComponent` at `client/src/app/components/network-device-page/editors/link-state-cell-renderer.component.ts`.
+- Updated `NETWORK_DEVICE_SCHEMA`:
+	- `device` is now `readOnly: true`
+	- `linkState` now uses the custom read-only renderer
+- Added read-only/disabled visual states via AG Grid cell classes:
+	- `.gd-cell-readonly` (slightly dimmed)
+	- `.gd-cell-disabled` (grayed, non-interactive)
+- Added generic edit event forwarding:
+	- `DataGridComponent` -> `GenericDatagridComponent` -> `NetworkDevicePageComponent`
+- Added store update flow for editable network-device fields (`ip`, `mask`, `gateway`, `mac`) via `NetworkDeviceStore.updateField(...)`.
+- Refactored update flow to pass raw `field` strings from grid events and perform schema-driven editability checks (`readOnly` and dynamic `disabled`) before merge/update.
+- Added stable row identity to `NetworkDeviceRow` as `rowId`, and switched `NetworkDeviceStore.updateField(...)` targeting from `device` to `rowId`.
+- Wired AG Grid row identity for network-device grids by binding `getRowId` to `row.rowId`.
+- Moved reusable update helpers into `GenericDatagridStore`:
+	- `withUpdatedField(...)` for schema-driven row patching
+	- `isEditable(...)` / `resolveColumnState(...)` for read-only/disabled enforcement
+	- `toNormalizedValue(...)` for shared type normalization/clamping
+- Moved reusable `DataGridComponent` from `client/src/app/components/data-grid/` to `client/src/app/generic-datagrid/data-grid/`.
+- Confirmed cross-grid synchronization: edits from one grid update store data and reflect in the second grid bound to the same store.
+- Added/updated `.test.ts` coverage for:
+	- IPv4 editor behavior
+	- Int editor behavior and min/max clamping
+	- MAC editor behavior (hex-and-colon input)
+	- link-state renderer behavior
+	- schema-to-colDef read-only/disabled/editor/renderer mapping
+	- generic store shared update/editability/normalization behavior
+	- generic datagrid event forwarding
+	- network-device page edit propagation to store and both grid instances
+	- network-device store field update behavior
+
+## 2026-03-08 - Step 2.1 Tweaks
+- Added optional `alignment` to `DataGridColumnSchema` with supported values: `left | center | right`.
+- Added `AlignmentColDefUtil` to keep alignment logic isolated and unit-testable.
+- Implemented default alignment rule:
+	- `string` -> `left`
+	- non-`string` types -> `right`
+- Implemented explicit alignment override when `alignment` is set in schema.
+- Added `GenericDatagridComponent` line options:
+	- `verticalGridLines` on/off
+	- `horizontalGridLines` on/off
+- Refactored grid-line styling to use AG Grid theme variables (`--ag-cell-horizontal-border`, `--ag-row-border-*`, `--ag-header-column-separator-*`) instead of `::ng-deep` border overrides.
+- Moved line-option theme-variable mapping out of component source into `generic-datagrid.theme.ts`.
+- Added `themeVariables` input on `DataGridComponent` and apply variables at the `ag-grid-angular` theme root to ensure AG Grid variables resolve correctly.
+- Bound line options in `NetworkDevicePageComponent`; current page configuration sets both toggles to `false` for both grid instances.
+- Moved network-device-specific schema/data/store files from `client/src/app/generic-datagrid/` to `client/src/app/components/network-device-page/` to keep generic datagrid code domain-agnostic.
+- Exposed `defaultColDef` settings through `GenericDatagridOptions` (`sortable`, `filter`, `resizable`, `filterMode`).
+- Added default filter mode `contains-only`, implemented as AG text filter with only `contains` allowed and a single condition.
+- Added component tests for default contains-only behavior and for `ag-grid-default` override behavior.
+
+## 2026-03-08 - Step 2 Rendering
+- Added route constant `NETWORK_DEVICE` and route entry for `#/network-device`.
+- Added `NetworkDevicePageComponent` as the Step 2 container/page component.
+- Added `GenericDatagridComponent` as a thin presentational wrapper.
+- Kept mapping and transformation logic out of the component by adding focused utility classes:
+	- `FieldTypeColDefUtil`
+	- `SchemaColumnToColDefUtil`
+	- `SchemaToColumnDefsUtil`
+- Updated Step 2 grid column behavior so data columns use fixed schema widths and a trailing filler column (`__filler__`) consumes remaining horizontal space.
+- Implemented two `app-generic-datagrid` instances on the network-device page:
+	- all rows from `NetworkDeviceStore`
+	- preview rows (first 5 rows) derived from store data
+- Added `.test.ts` coverage for:
+	- utility classes (field-type mapping, single-column mapping, schema-array mapping)
+	- generic datagrid presentational component input/config behavior
+	- network-device page container-to-store binding behavior
+
+## 2026-03-07 - Step 1 Foundation
+- Added all Step 1 source files under `client/src/app/generic-datagrid/`.
+- Implemented `DataGridColumnSchema` with `fieldName`, `fieldType`, `caption`, and `width` (`number | 'auto'`).
+- Split schema declarations into generic and domain files:
+	- `datagrid-schema.ts` for shared datagrid schema types
+	- `network-device-schema.ts` for network-device row and schema constants
+- Added the required network-device schema (`device`, `linkState`, `ip`, `mask`, `gateway`, `mac`).
+- Implemented deterministic dummy data generation with default `20` rows and fixed increment rules.
+- Implemented a signal-based store split:
+	- `GenericDatagridStore<TRow>` is an abstract generic base store
+	- `NetworkDeviceStore` is the concrete store for network-device schema and row generation
+- Kept default row generation behavior in derived stores (no default-count hook in the generic base).
+- Added `.test.ts` unit tests for both generic store behavior and network-device store behavior.
+- Chose to enforce a generator limit of `255` rows for the current deterministic IPv4/MAC format.

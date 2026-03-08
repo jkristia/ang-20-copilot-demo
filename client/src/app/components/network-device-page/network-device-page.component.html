@@ -1,0 +1,30 @@
+<div class="network-device-page">
+  <header class="network-device-page__header">
+    <h1>Network Device Grids</h1>
+    <p>Two reusable generic datagrid instances bound to `NetworkDeviceStore`.</p>
+  </header>
+
+  <div class="network-device-page__grid-layout">
+    <section class="network-device-page__panel">
+      <app-generic-datagrid
+        [schema]="schema()"
+        [rows]="allRows()"
+        [rowCountLabel]="'All Rows'"
+        [options]="gridOptions"
+        [getRowId]="getRowId"
+        (cellValueChanged)="onGridCellValueChanged($event)"
+      />
+    </section>
+
+    <section class="network-device-page__panel">
+      <app-generic-datagrid
+        [schema]="schema()"
+        [rows]="previewRows()"
+        [rowCountLabel]="'Preview Rows'"
+        [options]="gridOptions"
+        [getRowId]="getRowId"
+        (cellValueChanged)="onGridCellValueChanged($event)"
+      />
+    </section>
+  </div>
+</div>

@@ -5,7 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ColDef } from 'ag-grid-community';
 import { Employee } from '@blog/shared';
 import { EmployeesStore } from '../../services/employees.store';
-import { DataGridComponent, DataGridConfig } from '../data-grid/data-grid.component';
+import { DataGridComponent, DataGridConfig } from '../../generic-datagrid/data-grid/data-grid.component';
 
 @Component({
   selector: 'app-employees-list',
