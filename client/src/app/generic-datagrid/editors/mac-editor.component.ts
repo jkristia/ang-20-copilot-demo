@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ICellEditorAngularComp } from 'ag-grid-angular';
 import { ICellEditorParams } from 'ag-grid-community';
 
 import { type DataGridColumnAlignment } from '../datagrid-schema';
@@ -28,7 +29,9 @@ export interface MacEditorParams<TData extends object = Record<string, unknown>>
   `,
   styleUrl: './mac-editor.component.scss',
 })
-export class MacEditorComponent<TData extends object = Record<string, unknown>> {
+export class MacEditorComponent<TData extends object = Record<string, unknown>>
+  implements ICellEditorAngularComp
+{
   @ViewChild('editorInput') private readonly editorInput?: ElementRef<HTMLInputElement>;
 
   public value = '';

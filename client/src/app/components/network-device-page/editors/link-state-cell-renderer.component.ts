@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 import { NetworkDeviceLinkState, NetworkDeviceRow } from '../network-device-schema';
@@ -13,7 +14,7 @@ import { NetworkDeviceLinkState, NetworkDeviceRow } from '../network-device-sche
   `,
   styleUrl: './link-state-cell-renderer.component.scss',
 })
-export class LinkStateCellRendererComponent {
+export class LinkStateCellRendererComponent implements ICellRendererAngularComp {
   public value: NetworkDeviceLinkState | undefined;
   public dotClass = 'unknown';
 

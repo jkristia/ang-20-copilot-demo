@@ -39,6 +39,9 @@ export class SchemaColumnToColDefUtil<TRow extends object>
       ...this.toWidthDefinition(column.width),
       ...this.fieldTypeMapper.toColDef<TRow>(column.fieldType),
       ...this.alignmentMapper.toColDef<TRow>(column.fieldType, column.alignment),
+      // AG Grid custom component docs:
+      // Cell Renderers: https://www.ag-grid.com/angular-data-grid/component-cell-renderer/
+      // Cell Editors: https://www.ag-grid.com/angular-data-grid/cell-editors/
       cellRenderer: column.cellRenderer,
       cellRendererParams: column.cellRendererParams,
       cellEditor,
