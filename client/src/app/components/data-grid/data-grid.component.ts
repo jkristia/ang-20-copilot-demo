@@ -1,4 +1,5 @@
 import { Component, input, output, computed } from '@angular/core';
+import { NgStyle } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
 import { 
   ColDef, 
@@ -42,10 +43,11 @@ export interface DataGridConfig<T> {
 @Component({
   selector: 'app-data-grid',
   standalone: true,
-  imports: [AgGridAngular],
+  imports: [AgGridAngular, NgStyle],
   template: `
     <ag-grid-angular
       class="ag-theme-alpine"
+      [ngStyle]="themeVariables()"
       [rowData]="rowData()"
       [columnDefs]="config().columnDefs"
       [defaultColDef]="mergedDefaultColDef()"
@@ -92,6 +94,9 @@ export class DataGridComponent<T> {
   
   /** Loading state */
   public readonly loading = input<boolean>(false);
+
+  /** AG Grid theme variables applied at the theme root element */
+  public readonly themeVariables = input<Record<string, string>>({});
   
   /** Event emitted when grid is ready */
   public readonly gridReady = output<GridApi<T>>();

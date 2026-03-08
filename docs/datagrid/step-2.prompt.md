@@ -2,6 +2,8 @@
 
 This document covers Step 2 of the generic datagrid implementation: route integration, reusable grid rendering, and utility-first column/data mapping logic.
 
+Follow-up refinements after Step 2 are tracked in `docs/datagrid/step-2.1.prompt.md`.
+
 ## Goal
 Add a new route `network-device` (reachable as `#/network-device` because hash routing is enabled) that renders a container page with two instances of the same reusable `generic-datagrid` component.
 

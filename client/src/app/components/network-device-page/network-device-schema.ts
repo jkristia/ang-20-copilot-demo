@@ -1,4 +1,4 @@
-import { DataGridColumnSchema } from './datagrid-schema';
+import { DataGridColumnSchema } from '../../generic-datagrid/datagrid-schema';
 
 export type NetworkDeviceLinkState = 'link-up' | 'link-down' | 'link-error';
 
@@ -28,7 +28,7 @@ export const NETWORK_DEVICE_SCHEMA: readonly DataGridColumnSchema<NetworkDeviceR
     fieldName: 'ip',
     fieldType: 'ipv4',
     caption: 'IP',
-    width: 'auto',
+    width: 170,
   },
   {
     fieldName: 'mask',
@@ -40,7 +40,7 @@ export const NETWORK_DEVICE_SCHEMA: readonly DataGridColumnSchema<NetworkDeviceR
     fieldName: 'gateway',
     fieldType: 'ipv4',
     caption: 'Gateway',
-    width: 'auto',
+    width: 170,
   },
   {
     fieldName: 'mac',

@@ -1,0 +1,14 @@
+<section class="generic-datagrid">
+  <header class="generic-datagrid__header">
+    <h3 class="generic-datagrid__title">{{ rowCountLabel() }}: {{ rowData().length }}</h3>
+  </header>
+
+  <div class="generic-datagrid__grid-host">
+    <app-data-grid
+      [rowData]="rowData()"
+      [config]="gridConfig()"
+      [totalRows]="rowData().length"
+      [themeVariables]="gridThemeVariables()"
+    />
+  </div>
+</section>

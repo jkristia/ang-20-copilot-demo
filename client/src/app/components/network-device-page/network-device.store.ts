@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { GenericDatagridStore } from './generic-datagrid.store';
+import { GenericDatagridStore } from '../../generic-datagrid/generic-datagrid.store';
 import {
   DEFAULT_NETWORK_DEVICE_ROW_COUNT,
   util,
