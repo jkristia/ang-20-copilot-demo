@@ -30,10 +30,6 @@ export class NetworkDevicePageComponent {
   public readonly previewRows = computed(() => this.allRows().slice(0, 5));
 
   public onGridCellValueChanged(change: CellChange<NetworkDeviceRow>): void {
-    if (change.oldValue === change.newValue) {
-      return;
-    }
-
     this.networkDeviceStore.updateField(change.data.rowId, change.field, change.newValue);
   }
 }

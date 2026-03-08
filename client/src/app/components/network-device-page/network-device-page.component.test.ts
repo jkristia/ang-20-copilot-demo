@@ -156,6 +156,29 @@ describe('NetworkDevicePageComponent', () => {
     expect(store.updateField).toHaveBeenCalledWith(editedRow.rowId, 'mask', 31);
   });
 
+  it('still updates store when oldValue equals newValue', () => {
+    const fixture = TestBed.createComponent(NetworkDevicePageComponent);
+    fixture.detectChanges();
+
+    const store = TestBed.inject(NetworkDeviceStore) as unknown as NetworkDeviceStoreStub;
+    const gridStubs = fixture.debugElement.queryAll(By.directive(GenericDatagridStubComponent));
+    const previewRowsGrid = gridStubs[1]?.componentInstance as GenericDatagridStubComponent;
+
+    const editedRow = previewRowsGrid.rows()[0] as NetworkDeviceRow;
+    const updatedIp = '1.2.3.4';
+    editedRow.ip = updatedIp;
+
+    previewRowsGrid.cellValueChanged.emit({
+      data: editedRow,
+      field: 'ip',
+      oldValue: updatedIp,
+      newValue: updatedIp,
+    });
+    fixture.detectChanges();
+
+    expect(store.updateField).toHaveBeenCalledWith(editedRow.rowId, 'ip', updatedIp);
+  });
+
   it('propagates mac edits as string values', () => {
     const fixture = TestBed.createComponent(NetworkDevicePageComponent);
     fixture.detectChanges();

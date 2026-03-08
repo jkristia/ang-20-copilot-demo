@@ -108,4 +108,23 @@ describe('NetworkDeviceStore', () => {
     const unchanged = store.rows().find((row) => row.rowId === first.rowId);
     expect(unchanged).toEqual(first);
   });
+
+  it('emits a new row object when an edited row was already mutated in-place', () => {
+    const first = store.rows()[0];
+    expect(first).toBeDefined();
+
+    if (!first) {
+      return;
+    }
+
+    // Simulate AG Grid mutating the row object before app-level update handling.
+    first.ip = '1.2.3.4';
+
+    store.updateField(first.rowId, 'ip', '1.2.3.4');
+
+    const updated = store.rows().find((row) => row.rowId === first.rowId);
+    expect(updated).toBeDefined();
+    expect(updated).not.toBe(first);
+    expect(updated?.ip).toBe('1.2.3.4');
+  });
 });
