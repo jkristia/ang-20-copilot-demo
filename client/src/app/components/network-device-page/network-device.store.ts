@@ -34,10 +34,22 @@ export class NetworkDeviceStore extends GenericDatagridStore<NetworkDeviceRow> {
   ): void {
     const nextRows = this.rows().map((row) =>
       row.rowId === rowId
-        ? this.withUpdatedField(row, field, value)
+        ? this.toUpdatedRow(row, field, value)
         : row,
     );
 
     this.setRows(nextRows);
+  }
+
+  private toUpdatedRow(
+    row: NetworkDeviceRow,
+    field: string,
+    value: unknown,
+  ): NetworkDeviceRow {
+    const updatedRow = this.withUpdatedField(row, field, value);
+
+    // AG Grid can mutate row objects before the app-level update runs.
+    // Return a new object reference for the edited row so all bound grids refresh.
+    return updatedRow === row ? { ...row } : updatedRow;
   }
 }
