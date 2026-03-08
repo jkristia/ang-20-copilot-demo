@@ -1,23 +1,31 @@
-import { Injectable, signal } from '@angular/core';
+import { signal } from '@angular/core';
 
 import { DataGridColumnSchema } from './datagrid-schema';
-import { NetworkDeviceRow, NETWORK_DEVICE_SCHEMA } from './network-device-schema';
-import {
-  DEFAULT_NETWORK_DEVICE_ROW_COUNT,
-  util,
-} from './network-device-data';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class GenericDatagridStore {
-  private readonly _schema = signal<readonly DataGridColumnSchema<NetworkDeviceRow>[]>(NETWORK_DEVICE_SCHEMA);
-  private readonly _rows = signal<readonly NetworkDeviceRow[]>(util.generate());
+export interface GenericDatagridStoreOptions<TRow extends object> {
+  schema: readonly DataGridColumnSchema<TRow>[];
+  rows: readonly TRow[];
+}
+
+export abstract class GenericDatagridStore<TRow extends object> {
+  private readonly _schema = signal<readonly DataGridColumnSchema<TRow>[]>([]);
+  private readonly _rows = signal<readonly TRow[]>([]);
 
   public readonly schema = this._schema.asReadonly();
   public readonly rows = this._rows.asReadonly();
 
-  public resetRows(rowCount = DEFAULT_NETWORK_DEVICE_ROW_COUNT): void {
-    this._rows.set(util.generate(rowCount));
+  public constructor(options: GenericDatagridStoreOptions<TRow>) {
+    this._schema.set(options.schema);
+    this._rows.set(options.rows);
+  }
+
+  protected abstract getRowData(rowCount?: number): readonly TRow[];
+
+  public setRows(rows: readonly TRow[]): void {
+    this._rows.set(rows);
+  }
+
+  public resetRows(rowCount?: number): void {
+    this._rows.set(this.getRowData(rowCount));
   }
 }

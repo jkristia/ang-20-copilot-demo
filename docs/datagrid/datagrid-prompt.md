@@ -8,7 +8,7 @@ We are building a generic data grid feature in an Angular 20 app using AG Grid C
 This is Step 1 of a multi-step implementation.
 
 ## Step 1 Goal
-Create the foundational schema model, dummy row data, and a store that exposes both.
+Create the foundational schema model, dummy row data, and a store layer that exposes both.
 Do not implement grid rendering in this step.
 
 ## Constraints
@@ -23,7 +23,7 @@ Create a column schema interface with:
 - `fieldName`: property name in row JSON data
 - `fieldType`: one of `'bool' | 'int' | 'float' | 'string' | 'enum' | 'ipv4' | 'mac'`
 - `caption`: column header text
-- `width`: `number`
+- `width`: `number | 'auto'`
 
 ## Required Schema
 Create a schema with columns:
@@ -44,9 +44,13 @@ Generate deterministic dummy rows (default: 20 rows):
 - `mac`: start `00:aa:00:00:00:01`, increment last byte by 1 per row
 
 ## Store Requirements
-Create a store that exposes:
+Create a store layer that exposes:
 - the schema
 - the generated data rows
+
+Use two stores:
+- an abstract generic store for shared read-only state and row reset behavior
+- a concrete `NetworkDeviceStore` that defines how row data is generated (including the default row count)
 
 Use the existing project store pattern and keep exposed state read-only to consumers.
 
@@ -55,11 +59,12 @@ Implement:
 1. Schema interface/type definitions.
 2. Step-1 schema constant for the network-device columns.
 3. Dummy data generator and initial dataset.
-4. Store exposing schema + data.
+4. Abstract generic datagrid store.
+5. Network-device store exposing schema + data.
 
 ## Acceptance Criteria
 - Types compile without `any`.
 - Schema and rows are exported and consumable by future grid component work.
 - Data generation follows the exact increment rules above.
 - Design decision notes are updated in `docs/datagrid/datagrid-project-notes.md`.
-- Add a unit test for the data store using a `.test.ts` filename (not `.spec.ts`).
+- Add `.test.ts` unit tests for both generic store behavior and network-device store behavior (not `.spec.ts`).

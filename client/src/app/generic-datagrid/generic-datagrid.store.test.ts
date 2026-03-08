@@ -1,66 +1,81 @@
-import { TestBed } from '@angular/core/testing';
-
 import { GenericDatagridStore } from './generic-datagrid.store';
-import { DEFAULT_NETWORK_DEVICE_ROW_COUNT } from './network-device-data';
+import { DataGridColumnSchema } from './datagrid-schema';
+
+interface DemoRow {
+  id: number;
+  name: string;
+}
+
+const DEMO_SCHEMA: readonly DataGridColumnSchema<DemoRow>[] = [
+  {
+    fieldName: 'id',
+    fieldType: 'int',
+    caption: 'ID',
+    width: 120,
+  },
+  {
+    fieldName: 'name',
+    fieldType: 'string',
+    caption: 'Name',
+    width: 'auto',
+  },
+];
+
+const createDemoRows = (rowCount: number): readonly DemoRow[] =>
+  Array.from({ length: rowCount }, (_, index) => ({
+    id: index,
+    name: `row.${index}`,
+  }));
+
+class DemoStore extends GenericDatagridStore<DemoRow> {
+  public constructor() {
+    super({
+      schema: DEMO_SCHEMA,
+      rows: createDemoRows(2),
+    });
+  }
+
+  protected getRowData(rowCount = 2): readonly DemoRow[] {
+    return createDemoRows(rowCount);
+  }
+}
 
 describe('GenericDatagridStore', () => {
-  let store: GenericDatagridStore;
+  let store: DemoStore;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    store = TestBed.inject(GenericDatagridStore);
+    store = new DemoStore();
   });
 
-  it('exposes the Step 1 schema', () => {
+  it('exposes schema and initial rows', () => {
     const schema = store.schema();
+    const rows = store.rows();
 
-    expect(schema.map((column) => column.fieldName)).toEqual([
-      'device',
-      'linkState',
-      'ip',
-      'mask',
-      'gateway',
-      'mac',
+    expect(schema).toEqual(DEMO_SCHEMA);
+    expect(rows).toEqual([
+      { id: 0, name: 'row.0' },
+      { id: 1, name: 'row.1' },
     ]);
-    expect(schema[1]?.fieldType).toBe('enum');
-    expect(schema[2]?.fieldType).toBe('ipv4');
-    expect(schema[3]?.fieldType).toBe('int');
   });
 
-  it('creates deterministic default rows', () => {
-    const rows = store.rows();
+  it('replaces rows when setRows is called', () => {
+    store.setRows([{ id: 99, name: 'custom' }]);
 
-    expect(rows.length).toBe(DEFAULT_NETWORK_DEVICE_ROW_COUNT);
-    expect(rows[0]).toEqual({
-      device: 'device.0',
-      linkState: 'link-up',
-      ip: '192.168.0.2',
-      mask: 24,
-      gateway: '192.168.0.1',
-      mac: '00:aa:00:00:00:01',
-    });
-    expect(rows[5]).toEqual({
-      device: 'device.5',
-      linkState: 'link-error',
-      ip: '192.168.5.2',
-      mask: 24,
-      gateway: '192.168.5.1',
-      mac: '00:aa:00:00:00:06',
-    });
+    expect(store.rows()).toEqual([{ id: 99, name: 'custom' }]);
   });
 
-  it('regenerates rows with a custom count', () => {
+  it('regenerates rows with default and explicit counts', () => {
+    store.resetRows();
+    expect(store.rows()).toEqual([
+      { id: 0, name: 'row.0' },
+      { id: 1, name: 'row.1' },
+    ]);
+
     store.resetRows(3);
-
-    const rows = store.rows();
-    expect(rows.length).toBe(3);
-    expect(rows[2]).toEqual({
-      device: 'device.2',
-      linkState: 'link-error',
-      ip: '192.168.2.2',
-      mask: 24,
-      gateway: '192.168.2.1',
-      mac: '00:aa:00:00:00:03',
-    });
+    expect(store.rows()).toEqual([
+      { id: 0, name: 'row.0' },
+      { id: 1, name: 'row.1' },
+      { id: 2, name: 'row.2' },
+    ]);
   });
 });
