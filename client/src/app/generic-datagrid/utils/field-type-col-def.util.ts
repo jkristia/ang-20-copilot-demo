@@ -20,7 +20,6 @@ export class FieldTypeColDefUtil implements DataGridFieldTypeColDefMapper {
       case 'enum':
         return {
           cellDataType: 'text',
-          filter: 'agSetColumnFilter',
         };
       case 'ipv4':
       case 'mac':

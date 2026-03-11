@@ -7,11 +7,12 @@ import {
   GridApi, 
   RowSelectedEvent, 
   CellValueChangedEvent,
-  ModuleRegistry, 
-  AllCommunityModule 
+  ModuleRegistry,
+  AllCommunityModule,
+  themeBalham,
 } from 'ag-grid-community';
 
-// Register AG Grid modules
+// Register all AG Grid community modules
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 /**
@@ -46,7 +47,7 @@ export interface DataGridConfig<T> {
   imports: [AgGridAngular, NgStyle],
   template: `
     <ag-grid-angular
-      class="ag-theme-alpine"
+      [theme]="theme"
       [ngStyle]="themeVariables()"
       [rowData]="rowData()"
       [columnDefs]="config().columnDefs"
@@ -90,6 +91,9 @@ export class DataGridComponent<T> {
   /** Event emitted when a cell value changes */
   public readonly cellValueChanged = output<CellChange<T>>();
 
+  /** AG Grid theme */
+  public readonly theme = themeBalham;
+
   private gridApi?: GridApi<T>;
 
   /** Merged default column definition */
@@ -104,12 +108,7 @@ export class DataGridComponent<T> {
 
   /** Row selection configuration */
   public readonly rowSelectionConfig = computed(() => {
-    const selection = this.config().rowSelection;
-    if (!selection) return undefined;
-    return {
-      mode: selection as 'singleRow' | 'multiRow',
-      enableClickSelection: true,
-    };
+    return this.config().rowSelection;
   });
 
   /** Get row ID function for AG Grid */

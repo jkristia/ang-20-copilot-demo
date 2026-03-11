@@ -27,6 +27,7 @@ export const NETWORK_DEVICE_SCHEMA: readonly DataGridColumnSchema<NetworkDeviceR
     caption: 'Link State',
     width: 140,
     readOnly: true,
+    alignment: 'center',
     cellRenderer: LinkStateCellRendererComponent,
   },
   {

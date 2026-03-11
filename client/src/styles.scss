@@ -1,8 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* AG Grid styles */
+/* AG Grid styles - only base CSS needed when using theme objects */
 @import 'ag-grid-community/styles/ag-grid.css';
-@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+/* AG Grid cell alignment - global styles needed for AG Grid's DOM */
+.ag-cell {
+  display: flex;
+  align-items: center;
+}
+
+.ag-cell.gd-cell-left {
+  justify-content: flex-start;
+}
+
+.ag-cell.gd-cell-center {
+  justify-content: center;
+}
+
+.ag-cell.gd-cell-right {
+  justify-content: flex-end;
+}
+
+.ag-cell.gd-cell-readonly {
+  color: #64748b;
+}
+
+.ag-cell.gd-cell-disabled {
+  color: #94a3b8;
+  background-color: #f8fafc;
+  cursor: not-allowed;
+}
+
+/* AG Grid header alignment */
+.ag-header-cell.gd-header-left .ag-header-cell-label {
+  justify-content: flex-start;
+}
+
+.ag-header-cell.gd-header-center .ag-header-cell-label {
+  justify-content: center;
+}
+
+.ag-header-cell.gd-header-right .ag-header-cell-label {
+  justify-content: flex-end;
+  padding-right: 4px;
+}
 
 html {
   box-sizing: border-box;

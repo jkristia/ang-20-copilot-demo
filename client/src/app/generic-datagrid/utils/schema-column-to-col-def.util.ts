@@ -115,12 +115,14 @@ export class SchemaColumnToColDefUtil<TRow extends object>
   }
 
   private toCellClass(column: DataGridColumnSchema<TRow>): ColDef<TRow>['cellClass'] {
+    const alignmentClass = this.getAlignmentClass(column);
+    
     return (params: CellClassParams<TRow>): string[] => {
+      const classes: string[] = [alignmentClass];
+      
       if (!params.data) {
-        return [];
+        return classes;
       }
-
-      const classes: string[] = [];
 
       if (this.resolveColumnState(column.readOnly, params.data)) {
         classes.push('gd-cell-readonly');
@@ -132,6 +134,19 @@ export class SchemaColumnToColDefUtil<TRow extends object>
 
       return classes;
     };
+  }
+
+  private getAlignmentClass(column: DataGridColumnSchema<TRow>): string {
+    const alignment = column.alignment ?? (column.fieldType === 'string' ? 'left' : 'right');
+    switch (alignment) {
+      case 'center':
+        return 'gd-cell-center';
+      case 'right':
+        return 'gd-cell-right';
+      case 'left':
+      default:
+        return 'gd-cell-left';
+    }
   }
 
   private resolveColumnState(
