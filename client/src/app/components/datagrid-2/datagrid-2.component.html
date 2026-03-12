@@ -9,11 +9,15 @@
       <button (click)="retryLoad()">Retry</button>
     </div>
   } @else {
-    <app-generic-datagrid
-      [schema]="schema()"
-      [rows]="rows()"
-      [options]="gridOptions"
+    <ag-grid-angular
+      [theme]="theme"
+      [rowData]="rows()"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
       [getRowId]="getRowId"
+      [singleClickEdit]="true"
+      [stopEditingWhenCellsLoseFocus]="true"
+      [animateRows]="true"
       (cellValueChanged)="onCellValueChanged($event)"
     />
   }

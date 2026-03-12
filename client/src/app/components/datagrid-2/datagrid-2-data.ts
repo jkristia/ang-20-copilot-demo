@@ -18,6 +18,10 @@ class DataGrid2DataUtil {
       mask: 24,
       gateway: `192.168.${index}.1`,
       mac: `00:aa:00:00:00:${(index + 1).toString(16).padStart(2, '0')}`,
+      dhcpEnabled: index % 3 !== 0,
+      txPackets: 1000 + index * 347,
+      signalStrength: parseFloat((-40 - index * 1.7).toFixed(1)),
+      dnsServer: `8.8.${index % 4}.${index % 8}`,
     }));
   }
 

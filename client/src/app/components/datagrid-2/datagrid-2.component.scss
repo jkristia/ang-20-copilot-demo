@@ -13,9 +13,13 @@
   gap: 12px;
   background-color: #f5f5f5;
 
-  app-generic-datagrid {
+  ag-grid-angular {
     flex: 1;
     min-height: 0;
+
+    ::ng-deep .ag-horizontal-left-spacer {
+      display: none !important;
+    }
   }
 }
 
