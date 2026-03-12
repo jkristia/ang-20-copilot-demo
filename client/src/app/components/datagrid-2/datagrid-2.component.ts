@@ -46,7 +46,8 @@ export class DataGrid2Component {
       headerName: 'Link State',
       width: 140,
       editable: false,
-      cellStyle: { textAlign: 'center' },
+      cellStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
+      headerClass: 'ag-center-aligned-header',
       cellRenderer: DataGrid2LinkStateRendererComponent,
     },
     {

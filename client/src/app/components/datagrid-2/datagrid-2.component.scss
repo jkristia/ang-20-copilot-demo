@@ -20,6 +20,10 @@
     ::ng-deep .ag-horizontal-left-spacer {
       display: none !important;
     }
+
+    ::ng-deep .ag-center-aligned-header .ag-header-cell-label {
+      justify-content: center;
+    }
   }
 }
 
