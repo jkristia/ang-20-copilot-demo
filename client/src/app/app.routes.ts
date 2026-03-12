@@ -6,6 +6,7 @@ import { EmployeesListComponent } from './components/employees/employees.compone
 import { EmployeeDetailsListComponent } from './components/employee-details-list/employee-details-list.component';
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 import { NetworkDevicePageComponent } from './components/network-device-page/network-device-page.component';
+import { DataGrid2Component } from './components/datagrid-2/datagrid-2.component';
 import { APP_ROUTES } from './app.routes.constants';
 
 export const routes: Routes = [
@@ -21,5 +22,6 @@ export const routes: Routes = [
   },
   { path: APP_ROUTES.BAR_CHART, component: BarChartComponent },
   { path: APP_ROUTES.NETWORK_DEVICE, component: NetworkDevicePageComponent },
+  { path: APP_ROUTES.DATAGRID_2, component: DataGrid2Component },
   { path: '**', redirectTo: APP_ROUTES.POSTS },
 ];

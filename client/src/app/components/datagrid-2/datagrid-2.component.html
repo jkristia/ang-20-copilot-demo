@@ -1,0 +1,20 @@
+<div class="datagrid-2-page">
+  @if (isLoading()) {
+    <div class="loading-overlay">
+      <p>Loading device data...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-message">
+      <span>{{ error() }}</span>
+      <button (click)="retryLoad()">Retry</button>
+    </div>
+  } @else {
+    <app-generic-datagrid
+      [schema]="schema()"
+      [rows]="rows()"
+      [options]="gridOptions"
+      [getRowId]="getRowId"
+      (cellValueChanged)="onCellValueChanged($event)"
+    />
+  }
+</div>

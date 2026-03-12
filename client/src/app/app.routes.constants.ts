@@ -4,4 +4,5 @@ export const APP_ROUTES = {
   EMPLOYEES: 'employees',
   BAR_CHART: 'bar-chart',
   NETWORK_DEVICE: 'network-device',
+  DATAGRID_2: 'datagrid-2',
 } as const;
