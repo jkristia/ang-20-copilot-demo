@@ -119,6 +119,9 @@ export class DataGrid2Component {
     sortable: true,
     filter: true,
     resizable: true,
+    cellClassRules: {
+      'cell-readonly': (params) => params.colDef.editable === false,
+    },
   };
 
   public readonly getRowId = (params: GetRowIdParams<DataGrid2Row>): string =>

@@ -24,6 +24,10 @@
     ::ng-deep .ag-center-aligned-header .ag-header-cell-label {
       justify-content: center;
     }
+
+    ::ng-deep .cell-readonly {
+      opacity: 0.7;
+    }
   }
 }
 
