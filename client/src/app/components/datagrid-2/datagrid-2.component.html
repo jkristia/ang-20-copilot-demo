@@ -18,6 +18,9 @@
       [singleClickEdit]="true"
       [stopEditingWhenCellsLoseFocus]="true"
       [animateRows]="false"
+      (gridReady)="onGridReady($event)"
+      (cellMouseDown)="onCellMouseDown($event)"
+      (cellMouseOver)="onCellMouseOver($event)"
       (cellValueChanged)="onCellValueChanged($event)"
     />
   }
