@@ -9,11 +9,25 @@ import {
   CellValueChangedEvent,
   ModuleRegistry,
   AllCommunityModule,
+  themeQuartz,
+  themeAlpine,
   themeBalham,
+  themeMaterial,
 } from 'ag-grid-community';
 
 // Register all AG Grid community modules
 ModuleRegistry.registerModules([AllCommunityModule]);
+
+// Available AG Grid themes - change SELECTED_THEME to switch
+const AG_GRID_THEMES = {
+  quartz: themeQuartz,      // Modern flat design, hamburger menu filter icon
+  alpine: themeAlpine,      // Clean look, funnel filter icon
+  balham: themeBalham,      // Compact, traditional funnel filter icon
+  material: themeMaterial,  // Material Design style
+};
+
+// *** CHANGE THIS TO SWITCH THEMES: 'quartz' | 'alpine' | 'balham' | 'material' ***
+const SELECTED_THEME: keyof typeof AG_GRID_THEMES = 'balham';
 
 /**
  * Cell value change event with row data and field info
@@ -92,7 +106,7 @@ export class DataGridComponent<T> {
   public readonly cellValueChanged = output<CellChange<T>>();
 
   /** AG Grid theme */
-  public readonly theme = themeBalham;
+  public readonly theme = AG_GRID_THEMES[SELECTED_THEME];
 
   private gridApi?: GridApi<T>;
 

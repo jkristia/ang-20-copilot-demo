@@ -1,9 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* AG Grid styles - only base CSS needed when using theme objects */
-@import 'ag-grid-community/styles/ag-grid.css';
-
-/* AG Grid cell alignment - global styles needed for AG Grid's DOM */
+/* AG Grid cell alignment */
 .ag-cell {
   display: flex;
   align-items: center;
